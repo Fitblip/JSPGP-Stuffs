@@ -1,0 +1,82 @@
+Notes
+
+// Entire sig packet decoded! Yay!
+
+136 == 0x88 == 10001000
+    [7]   == 1        => Good
+    [6]   == 0        => Old-form packet
+    [2:5] == 0010 (2) => Signature Packet
+    [0:1] == 00 (0)   => one-octet packet length
+
+94  == Len of packet
+
+4   == Version number
+
+1   == Sig type     
+     \
+       0x01: Signature of a canonical text document.
+       This means the signer owns it, created it, or certifies that it
+       has not been modified.  The signature is calculated over the text
+       data with its line endings converted to <CR><LF>.
+
+17  == Pubkey Algo => DSA (Digital Signature Algorithm)
+
+8   == Hash Algo   => SHA256
+
+0   == Count1 \ 
+               |- hashed packet total = (0<<8) + 6 == 6 bytes
+6   == Count2 /
+
+ # 5    // Packet count 
+   + 2  // Sig. Creation Time
+    - 78  
+    - 177 
+    - 243
+    - 98
+         ((78<<24) + (177<<16) + (243<<8) + 98) * 1000 == 1320285026000
+         new Date(1320285026000) == Wed Nov 02 2011 21:50:26 GMT-0400 (EDT)
+
+0   == Count1 \ 
+               |- unhashed packet total = (0<<8) + 10 == 10 bytes
+10  == Count2 /
+
+ # 9       // 9 bytes
+   + 16    // Issuer key ID
+    - 183  // 0xB7
+    - 255  // 0xFF
+    - 121  // 0x79
+    - 124  // 0x7C
+    - 135  // 0x87
+    - 148  // 0x94
+    - 249  // 0xF9
+    - 118  // 0x76
+                0xB7FF797C8794F976
+
+
+151 \
+     |-> Left 16 bits (2 bytes) of signed hash value  [97 A7]
+167 /
+
+1 == Count1 \
+            |- Scalar representation of 256 bits / 32 bytes
+0 == Count2 /
+               var length = ((1<<8) + 0) == 256 bits == 32 bytes
+
+// r data
+r = 145 35 21 241 12 190 182 209 201 247 202 130 221 37 118 30 223 4 187 49 136 237 4  17 49 71 127 251 239 81 162 137
+// Hex
+r = 91 23 15 f1 0c be b6 d1 c9 f7 ca 82 dd 25 76 1e df 04 bb 31 88 ed 04 11 31 47 7f fb ef 51 a2 89
+
+
+1   == Count1 \
+              |- Scalar representation of 255 bits / 31 bytes
+255 == Count2 / 
+               // Scary when I can spot this without calculating offsets...
+                  var length = ((0<<8) + 255)
+
+// s data
+s = 111 192 41 231 105 79 45 187 231 95 103 55 117 8 49 24 78 234 3 184 126 122 110 242 249 210 5 125 199 30 61 70
+// Hex
+s = 6f c0 29 e7 69 4f 2d bb e7 5f 67 37 75 08 31 18 4e ea 03 b8 7e 7a 6e f2 f9 d2 05 7d c7 1e 3d 46
+
+
