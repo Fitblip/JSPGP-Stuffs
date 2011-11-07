@@ -24,27 +24,49 @@ document.getElementById('output').innerHTML += "<pre>Y = " + y.toString(16) + "<
 m = new BigInteger('97a75a8bf876aa13d0867fe50085343069a1af6e60f3956b044d8dc7efbd888c',16);
 document.getElementById('output').innerHTML += "<pre>M = " + m.toString(16) + "</pre>";
 
+var start = new Date().getTime();
 w = s.modInverse(q);
-document.getElementById('output').innerHTML += "<pre>W = " + w.toString(16) + "</pre>";
+var end = new Date().getTime();
+var time = end - start;
+document.getElementById('output').innerHTML += "<pre>W = " + w.toString(16) +"</pre>";
 
+
+var start = new Date().getTime();
 u1 = m.multiply(w).mod(q);
-document.getElementById('output').innerHTML += "<pre>U1 = " + u1.toString(16) + "</pre>";
+var end = new Date().getTime();
+var time = end - start;
+document.getElementById('output').innerHTML += "<pre>U1 = " + u1.toString(16) +"</pre>";
 
+var start = new Date().getTime();
 u2 = r.multiply(w).mod(q);
-document.getElementById('output').innerHTML += "<pre>U2 = " + u2.toString(16) + "</pre>";
+var end = new Date().getTime();
+var time = end - start;
+document.getElementById('output').innerHTML += "<pre>U2 = " + u2.toString(16) +"</pre>";
 
 // Things break here on mobile browsers. :( not sure why...
+var start = new Date().getTime();
 a = g.modPow(u1,p);
-document.getElementById('output').innerHTML += "<pre>A = " + a.toString(16) + "</pre>";
+var end = new Date().getTime();
+var time = end - start;
+document.getElementById('output').innerHTML += "<pre>A = " + a.toString(16) +"</pre>";
 
+var start = new Date().getTime();
 b = y.modPow(u2,p);
-document.getElementById('output').innerHTML += "<pre>B = " + b.toString(16) + "</pre>";
+var end = new Date().getTime();
+var time = end - start;
+document.getElementById('output').innerHTML += "<pre>B = " + b.toString(16) +"</pre>";
 
+var start = new Date().getTime();
 c = a.multiply(b).mod(p);
-document.getElementById('output').innerHTML += "<pre>C = " + c.toString(16) + "</pre>";
+var end = new Date().getTime();
+var time = end - start;
+document.getElementById('output').innerHTML += "<pre>C = " + c.toString(16) +"</pre>";
 
+var start = new Date().getTime();
 v = c.mod(q);
-document.getElementById('output').innerHTML += "<pre>V = " + v.toString(16) + "</pre>";
+var end = new Date().getTime();
+var time = end - start;
+document.getElementById('output').innerHTML += "<pre>V = " + v.toString(16) +"</pre>";
 document.getElementById('output').innerHTML += "<pre>R = " + r.toString(16) + "</pre>";
 
 if (v.compareTo(r) == 0) {
