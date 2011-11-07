@@ -68,7 +68,7 @@ r = 145 35 21 241 12 190 182 209 201 247 202 130 221 37 118 30 223 4 187 49 136 
 r = 91 23 15 f1 0c be b6 d1 c9 f7 ca 82 dd 25 76 1e df 04 bb 31 88 ed 04 11 31 47 7f fb ef 51 a2 89
 
 
-1   == Count1 \
+0   == Count1 \
               |- Scalar representation of 255 bits / 31 bytes
 255 == Count2 / 
                // Scary when I can spot this without calculating offsets...
