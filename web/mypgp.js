@@ -110,26 +110,43 @@ function toHex(str) {
     return hex;
 }
 
+function dec2hex(d) {
+    var hex = Number(d).toString(16);
+    padding = 2
+    while (hex.length < padding) {
+        hex = "0" + hex;
+    }
+    return hex;
+}
+
+
 function publicKey(key) {
     // Check for header thing
     if (key.indexOf('-----BEGIN PGP PUBLIC KEY BLOCK-----') != -1 ) {
         if (debug) {console.log('Key Found');}
     } else {
         if (debug) {console.log('No key found');}
-        return "No public key supplied!"
+        this.err = "No public key supplied!";
+        return;
     }
 
     // Check for last tidbit, plus ending thing, and make sure they're in the right order.
-    if (key.indexOf('\n=') != -1 && key.indexOf('\n-----END PGP PUBLIC KEY BLOCK-----') != -1 && key.indexOf('\n=') < key.indexOf('\n-----END PGP PUBLIC KEY BLOCK-----')) {
+    if (key.indexOf('\n=') != -1 && key.indexOf('\n') != -1 && key.indexOf('\n=') < key.indexOf('\n-----END PGP PUBLIC KEY BLOCK-----')) {
         if (debug) {console.log('Valid key');}
     } else {
         if (debug) {console.log('Invalid key');}
-        return "Invalid Key!"
+        this.err = "Invalid Key!";
+        return;
     }
 
     // Compensate for the two \n chars and find our finish
     start = key.indexOf('\n\n') + 2;
     finish = key.indexOf('=\n');
+
+    if ((finish - start) < 20) {
+        this.err = "Truncated key?"
+        return;
+    }
 
     // Slice our key out
     key = key.slice(start,finish);
@@ -251,25 +268,65 @@ function publicKey(key) {
             // 20 == Reserved (Formally Elgaml Encrypt or Sign)
             // Version 4
             } else if ((algo == 16 || algo == 20) && vers == 4) {
-                var m = i;
 
-                var lp = Math.floor((decoded.charCodeAt(i) * 256 + decoded.charCodeAt(i + 1) + 7) / 8);
-                i += lp + 2;
+                // Set up primes to parse out
+                primes = ['p','g','y'];
+                // Set up new dictionary to store each hex representation
+                a = {};
+                a['p'] = "";
+                a['g'] = "";
+                a['y'] = "";
+                i -= 1
 
-                var lg = Math.floor((decoded.charCodeAt(i) * 256 + decoded.charCodeAt(i + 1) + 7) / 8);
-                i += lg + 2;
+                for (c=0;c<primes.length;c++){
+                    size = Math.floor((decoded.charCodeAt(++i) * 256 + decoded.charCodeAt(i + 1) + 7) / 8)   
+                    for (b=0;b<size;b++) {
+                        a[primes[c]] += String(dec2hex(decoded.charCodeAt(i + b + 2)));
+                    }
+                    a[primes[c]] = a[primes[c]].split(' ')
+                    i += (size +1)
+                }
 
-                var ly = Math.floor((decoded.charCodeAt(i) * 256 + decoded.charCodeAt(i + 1) + 7) / 8);
-                i += ly + 2;
-
-                this.pkey = s2r(decoded.substr(m, lp + lg + ly + 6));
+                this.elgamelP = new BigInteger(a['p'].toString(),16)
+                this.elgamelG = new BigInteger(a['g'].toString(),16)
+                this.elgamelY = new BigInteger(a['y'].toString(),16)
 
                 var pkt = String.fromCharCode(0x99) + String.fromCharCode(len >> 8) + String.fromCharCode(len & 255) + decoded.substr(k, len);
                 var fp = SHA1(pkt);
-                this.fp = toHex(fp);
+                this.fp = toHex(fp); 
                 this.keyid = toHex(fp.substr(fp.length - 8, 8));
                 this.type = "ELGAMAL";
                 found = 3;
+
+            // We found the DSA sig stuffs
+            } else if (algo == 17 && vers == 4) {
+                var m = i;
+                primes = ['p','q','g','y'];
+                a = {};
+                a['p'] = "";
+                a['q'] = "";
+                a['g'] = "";
+                a['y'] = "";
+
+                i -= 1
+                for (c=0;c<primes.length;c++){
+                    // Nice workaround for the rounding problem. Ugly problem. 
+                    size = Math.floor((decoded.charCodeAt(++i) * 256 + decoded.charCodeAt(i + 1) + 7) / 8)   
+                    for (b=0;b<size;b++) {
+                        a[primes[c]] += String(dec2hex(decoded.charCodeAt(i + b + 2)));
+                    }
+                    a[primes[c]] = a[primes[c]].split(' ')
+                    i += (size +1)
+                }
+                
+                this.dsaP = new BigInteger(a['p'].toString(),16)
+                this.dsaQ = new BigInteger(a['q'].toString(),16)
+                this.dsaG = new BigInteger(a['g'].toString(),16)
+                this.dsaY = new BigInteger(a['y'].toString(),16)
+
+                // Line up damn it!
+                i += 1
+
             } else {
                 i = k + len;
             }
@@ -332,7 +389,7 @@ function publicKey(key) {
                     this.hash = algos[ar[0]];
                 }
                 // Count up packet lengths
-                i = i + decoded.charCodeAt(i) + 1;
+                i += decoded.charCodeAt(i) + 1;
             }
 
             // If we can't find either of these, just set them to a dummy value
