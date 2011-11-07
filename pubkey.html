@@ -37,6 +37,8 @@ height:100%;
 <script src='sha1.js'></script>
 <script src='sha256.js'></script>
 <script src='base64.js'></script>
+<script src="jsbn.js"></script>
+<script src="jsbn2.js"></script>
 <script src='mypgp.js'></script>
 
 </head>
@@ -52,7 +54,7 @@ height:100%;
     </form>-->
     <div class="textwrapper">
         <h2>Enter public key and hit 'Get info'</h2>
-        <textarea name="pubkey" cols="75" rows="35" onkeydown='if (event.keyCode == 13) pubkey()'></textarea>
+        <textarea name="pubkey" cols="75" rows="35" ></textarea>
         <form action="javascript:pubkey()" name="t">
           <input type="submit" value="Get info">
         </form>
@@ -81,8 +83,8 @@ function pubkey() {
 key = document.getElementsByName('pubkey')[0].value;
 info = new publicKey(key);
 
-if (typeof(info) != "object") {
-    alert("Something's wrong! Have some debug info!\n" + info)
+if (info.err != undefined) {
+    alert("Something's wrong! Have some debug info:\n\n" + info.err)
     return
 }
 user        = info.user
