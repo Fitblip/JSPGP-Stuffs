@@ -1,0 +1,156 @@
+<html>
+<head>
+<style>
+/*textarea
+{
+    width:45%;
+    height:70%;
+}
+
+.textwrapper
+{
+    margin:5px 0;
+    padding:0px;
+}*/
+
+.infos 
+{
+margin-left: auto;
+margin-right: auto;
+border: 1px solid #D4D4D4;
+border-spacing:0px;
+}
+
+.infos td {
+border: 1px solid #D4D4D4;
+}
+
+html, body 
+{
+height:100%;
+}
+
+
+</style>
+
+<script src='md5.js'></script>
+<script src='sha1.js'></script>
+<script src='sha256.js'></script>
+<script src='base64.js'></script>
+<script src='mypgp.js'></script>
+
+</head>
+<body>
+
+<div style="text-align: center">
+ <!--    Hash a string:<input id='enter' value='enter stuffs!' onfocus='clearinput("enter")' onkeydown='if (event.keyCode == 13) dostuffs()'></input>
+   Lookup Email<input id='email' value='Example@gmail.com' onfocus='clearinput("email")' onkeydown='if (event.keyCode == 13) dolookup()'></input>
+    <input type='button' value='Encrypt!' action='dostuffs()'></input>
+    <br>
+    <form> 
+    <input type='button' value='Clear'  action='cleareverything()'></input>
+    </form>-->
+    <div class="textwrapper">
+        <h2>Enter public key and hit 'Get info'</h2>
+        <textarea name="pubkey" cols="75" rows="35" onkeydown='if (event.keyCode == 13) pubkey()'></textarea>
+        <form action="javascript:pubkey()" name="t">
+          <input type="submit" value="Get info">
+        </form>
+    </div>
+</div>
+
+<div id="out" style="text-align: center"></div>
+<br>
+
+<script>
+function dostuffs() {
+    string = document.getElementById('enter').value;
+    sha1   = SHA1(string);
+    sha256 = SHA256(string);
+    md5    = MD5(string);
+    out = document.getElementById('out');
+
+    out.innerHTML = out.innerHTML + 
+            '<pre>SHA256 (' + string + ') : ' + sha256 + '</pre>' +
+            '<pre>SHA1   (' + string + ') : ' + sha1   + '</pre>' +
+            '<pre>MD5    (' + string + ') : ' + md5    + '</pre>' ;
+}
+
+function pubkey() {
+// Grab stuff from 
+key = document.getElementsByName('pubkey')[0].value;
+info = new publicKey(key);
+
+if (typeof(info) != "object") {
+    alert("Something's wrong! Have some debug info!\n" + info)
+    return
+}
+user        = info.user
+user        = user.replace('<','&lt;').replace('>','&gt;')
+
+created     = info.created;
+expires     = info.exp;
+prefhash    = info.hash
+type        = info.type
+
+fingerprint = info.fp
+fingerprint = fingerprint.substr(0,17) + '...'
+
+keyid       = info.keyid
+
+enckey      = info.pkey
+version     = info.vers
+
+out = document.getElementById('out');
+
+out.innerHTML = out.innerHTML + 
+                '<table class="infos" style="width:60%;">' + 
+                    '<tbody>' + 
+
+                        '<tr>' + 
+                            '<td>' + 'User info' + '</td>' +
+                            '<td>' + user + '</td>' +
+                        '</tr>' + 
+
+                        '<tr>' + 
+                            '<td>' + 'Created' + '</td>' +
+                            '<td>' + created + '</td>' +
+                        '</tr>' + 
+
+                        '<tr>' + 
+                            '<td>' + 'Expires' + '</td>' +
+                            '<td>' + expires + '</td>' +
+                        '</tr>' + 
+
+                        '<tr>' + 
+                            '<td>' + 'Preferred Hashing Algorithm' + '</td>' +
+                            '<td>' + prefhash + '</td>' +
+                        '</tr>' + 
+
+                        '<tr>' + 
+                            '<td>' + 'Key Type' + '</td>' +
+                            '<td>' + type + '</td>' +
+                        '</tr>' + 
+
+                        '<tr>' + 
+                            '<td>' + 'Fingerprint' + '</td>' +
+                            '<td>' + fingerprint + '</td>' +
+                        '</tr>' + 
+
+                        '<tr>' + 
+                            '<td>' + 'Key ID' + '</td>' +
+                            '<td>' + keyid + '</td>' +
+                        '</tr>' + 
+
+                        '<tr>' + 
+                            '<td>' + 'Key Version' + '</td>' +
+                            '<td>' + version + '</td>' +
+                        '</tr>' +
+                    '<tbody>' + 
+                '</table><br>';
+}
+
+</script>
+</body>
+
+</html>
