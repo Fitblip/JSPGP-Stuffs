@@ -1,0 +1,27 @@
+RSA notes:
+
+Public Key:
+n, e
+
+Signature:
+z
+
+Int rep of message digest == y 
+
+y = z^e % n
+
+y = pow(z,e,n)
+
+n = ba 80 6e 27 85 2e 81 f0 46 d9 39 fa 98 59 50 4c 88 4a 62 8d 5e 27 0f c4 3a 54 f2 d1 62 52 9a 93 f0 78 99 f3 8f f7 d6 f6 13 33 16 cb 05 44 16 7c 2d 67 eb dc c5 42 a8 81 26 79 a0 0a 43 06 8a 7b 18 f4 1d 77 75 03 f6 0e f5 0b d6 6e af 06 80 c4 01 94 43 50 cc 22 8b d2 c7 b1 1e 0d 86 88 f6 fd 5b 5b 66 4c 9e 71 6a a1 74 9e 7a 0e aa 78 7e 4d 9f cb 67 02 d0 d0 7d 2a 14 c4 8f 59 7f 02 f7 31 
+e = 01 00 01
+
+
+// Lolbug
+768     768
+1280    1024
+1792    1536
+2304    2048
+2816    2560
+3382    3072
+3840    3584
+4096    4096
