@@ -143,11 +143,6 @@ function publicKey(key) {
     start = key.indexOf('\n\n') + 2;
     finish = key.indexOf('=\n');
 
-    if ((finish - start) < 20) {
-        this.err = "Truncated key?"
-        return;
-    }
-
     // Slice our key out
     key = key.slice(start,finish);
     if (debug) console.log("Key start:finish => " + start + ":" + finish + "\n" + key);
@@ -333,7 +328,9 @@ function publicKey(key) {
         // If we have a UserID packet
         } else if (a == 13) {
             // Parse out UTF-8 string of info
+            if (this.user == undefined) {
             this.user = decoded.substr(i, len);
+            }
             i += len;
 
         // If we have a signature packet for a version 4 key
@@ -342,7 +339,9 @@ function publicKey(key) {
             var p = i;
 
             // Skip our header info
-            i = i + 4;
+            i = i + 2;
+            alg  = decoded.charCodeAt(i++)
+            hash = decoded.charCodeAt(i++)
 
             // Hashed packet count
             hCount = ((decoded.charCodeAt(i++)<<8) + decoded.charCodeAt(i++));
@@ -356,10 +355,8 @@ function publicKey(key) {
                 for (c=0;c<decoded.charCodeAt(i);c++) {
                     ar.push(decoded.charCodeAt(i + c + 1));
                 }
-
                 // If we found the expiration subpacket
                 if (ar[0] == 9) {
-
                     // Remove packet type
                     ar.shift();
                     // Bit-shift & scalar magic to get expiration seconds 
@@ -370,27 +367,20 @@ function publicKey(key) {
                     exp = time + exp;
                     expdate = new Date(exp);
                     this.exp = expdate.toLocaleString();
-
-                // If we found preferred hashing algo packet
-                } else if (ar[0] == 21) {
-
-                    // List of known supported hashing algorithms
-                    algos = new Object();
-                    algos[1] = "MD5";
-                    algos[2] = "SHA-1";
-                    algos[3] = "RIPE-MD/160";
-                    algos[8] = "SHA-256";
-                    algos[9] = "SHA384";
-                    algos[10] = "SHA512";
-                    algos[11] = "SHA224";
-
-                    // Remove packet type
-                    ar.shift();
-                    this.hash = algos[ar[0]];
                 }
                 // Count up packet lengths
                 i += decoded.charCodeAt(i) + 1;
             }
+
+            algos = new Object();
+            algos[1] = "MD5";
+            algos[2] = "SHA-1";
+            algos[3] = "RIPE-MD/160";
+            algos[8] = "SHA-256";
+            algos[9] = "SHA384";
+            algos[10] = "SHA512";
+            algos[11] = "SHA224";
+            this.hash = algos[hash];   
 
             // If we can't find either of these, just set them to a dummy value
             if (this.exp == null) {
@@ -398,12 +388,34 @@ function publicKey(key) {
             }
             if (this.hash == null) {
                 this.hash = "Unknown";
-            }
-    
-            // Revert to original i value, and increment fixed packet length
-            i = p;
-            i += len;
+            } 
 
+            // Find out unhashed packet count, and do the same thing
+            uCount = ((decoded.charCodeAt(i++)<<8) + decoded.charCodeAt(i++));
+            max = i + uCount;
+            while (i < max) {
+                ar = [];
+                // Make an array of subpacket info
+                for (c=0;c<decoded.charCodeAt(i);c++) {
+                    ar.push(decoded.charCodeAt(i + c + 1));
+                }
+                // If we found the issuer key ID
+                if (ar[0] == 16) {
+                    // Remove packet type
+                    ar.shift();
+                    a=""
+                    for (t=0;t<ar.length;t++) {
+                        a += String(dec2hex(ar[t]))
+                    } 
+                    this.id= "0x" + a.toUpperCase()
+                }
+                // Count up packet lengths
+                i += decoded.charCodeAt(i) + 1;
+            }
+            // poor mans reset, stop caring about the rest of the bytes
+            // which in this case is our r and s values for DSA. Big woop. 
+            i = p
+            i += len
         } else {
             i += len;
         }
