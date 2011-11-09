@@ -259,7 +259,7 @@ function publicKey(key) {
                     this.fp='';
                     this.keyid='';
                 }
-            // 16 == ElGamel
+            // 16 == ElGamal
             // 20 == Reserved (Formally Elgaml Encrypt or Sign)
             // Version 4
             } else if ((algo == 16 || algo == 20) && vers == 4) {
@@ -282,9 +282,9 @@ function publicKey(key) {
                     i += (size +1)
                 }
 
-                this.elgamelP = new BigInteger(a['p'].toString(),16)
-                this.elgamelG = new BigInteger(a['g'].toString(),16)
-                this.elgamelY = new BigInteger(a['y'].toString(),16)
+                this.elgP = new BigInteger(a['p'].toString(),16)
+                this.elgG = new BigInteger(a['g'].toString(),16)
+                this.elgY = new BigInteger(a['y'].toString(),16)
 
                 var pkt = String.fromCharCode(0x99) + String.fromCharCode(len >> 8) + String.fromCharCode(len & 255) + decoded.substr(k, len);
                 var fp = SHA1(pkt);
