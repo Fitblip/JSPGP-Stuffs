@@ -1,0 +1,15 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Hello! 
+
+This is some dummy text :)
+
+YAY!
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iEYEAREIAAYFAk66qn4ACgkQ/4VoRvvabyCmAgCg5drROBMxlBOuJnaRosE8KLo7
+fSEAoOQN3ZCT3wN3P9f399Bfuz1fdjNB
+=h2ly
+-----END PGP SIGNATURE-----
