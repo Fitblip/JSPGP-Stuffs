@@ -460,7 +460,6 @@ UdwNaw==
 
 
 <script>
-
 function go() {
 pubkey(768);
 pubkey(1024);
@@ -471,7 +470,6 @@ pubkey(3072);
 pubkey(3584);
 pubkey(4096);
 }
-
 
 function pubkey(size) {
   key = document.getElementById('dsa' + size).innerHTML
@@ -484,9 +482,6 @@ function pubkey(size) {
   expires     = info.exp;
   prefhash    = info.hash
   type        = info.type
-
-  fingerprint = info.fp
-  fingerprint = fingerprint.substr(0,17) + '...'
 
   keyid       = info.id
 
