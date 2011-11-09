@@ -159,7 +159,7 @@ function publicKey(key) {
         // If (byte AND 128) == 0, then break loop
         if ((a & 128) == 0) break; 
 
-        // This massages our bytes so we can parse them properly later. Jebus.
+        // This all figures out how big our packet is based off the header
         // If (byte AND 64) == 0 
         if (a & 64) {
             a &= 63;
@@ -233,32 +233,48 @@ function publicKey(key) {
             // This packet is our algorithm packet
             var algo = decoded.charCodeAt(i++);
 
-            // 1 == RSA (Encrypt or Sign)
-            // 2 == RSA (Encrypt only)
-            if(algo == 1 || algo == 2) {
-                var m = i;
-                var lm = Math.floor((decoded.charCodeAt(i)*256 + decoded.charCodeAt(i+1)+7)/8);
-                i+=lm+2;
-
-                var mod = decoded.substr(m,lm+2);
-                var le = Math.floor((decoded.charCodeAt(i)*256 + decoded.charCodeAt(i+1)+7)/8);
-                i+=le+2;
-
-                this.pkey=s2r(decoded.substr(m,lm+le+4));
+            // 1 == RSA (Encrypt or Sign) and version 4 AND regular packet [Stupid RSA keys :(]
+            if(algo == 1 && vers == 4 && a == 6) {
                 this.type="RSA";
+                primes = ['n','e'];
+                a = {};
+                a['n'] = "";
+                a['e'] = "";
+                i -= 1
 
-                if(vers==3) {
-                    this.fp='';
-                    this.keyid=toHex(mod.substr(mod.length-8, 8));
-                } else if(vers==4) {
-                    var pkt = String.fromCharCode(0x99) + String.fromCharCode(len>>8) + String.fromCharCode(len&255)+decoded.substr(k, len);
-                    var fp = SHA1(pkt);
-                    this.fp=toHex(fp);
-                    this.keyid=toHex(fp.substr(fp.length-8,8));
-                } else {
-                    this.fp='';
-                    this.keyid='';
+                for (c=0;c<primes.length;c++){
+                    size = Math.floor((decoded.charCodeAt(++i) * 256 + decoded.charCodeAt(i + 1) + 7) / 8)   
+                    for (b=0;b<size;b++) {
+                        a[primes[c]] += String(dec2hex(decoded.charCodeAt(i + b + 2)));
+                    }
+                    a[primes[c]] = a[primes[c]].split(' ')
+                    i += (size +1)
                 }
+                this.rsaN = new BigInteger(a['n'].toString(),16)
+                this.rsaE = new BigInteger(a['e'].toString(),16)
+                i = i+1
+
+            // If we have an encrypt or sign (v4) and a subkey packet
+            } else if(algo == 1 && vers == 4 && a == 14) {
+                this.type="RSA";
+                primes = ['n','e'];
+                a = {};
+                a['n'] = "";
+                a['e'] = "";
+                i -= 1
+
+                for (c=0;c<primes.length;c++){
+                    size = Math.floor((decoded.charCodeAt(++i) * 256 + decoded.charCodeAt(i + 1) + 7) / 8)   
+                    for (b=0;b<size;b++) {
+                        a[primes[c]] += String(dec2hex(decoded.charCodeAt(i + b + 2)));
+                    }
+                    a[primes[c]] = a[primes[c]].split(' ')
+                    i += (size +1)
+                }
+                this.rsasubN = new BigInteger(a['n'].toString(),16)
+                this.rsasubE = new BigInteger(a['e'].toString(),16)
+                i = i+1
+                
             // 16 == ElGamal
             // 20 == Reserved (Formally Elgaml Encrypt or Sign)
             // Version 4
@@ -286,10 +302,10 @@ function publicKey(key) {
                 this.elgG = new BigInteger(a['g'].toString(),16)
                 this.elgY = new BigInteger(a['y'].toString(),16)
 
-                var pkt = String.fromCharCode(0x99) + String.fromCharCode(len >> 8) + String.fromCharCode(len & 255) + decoded.substr(k, len);
-                var fp = SHA1(pkt);
-                this.fp = toHex(fp); 
-                this.keyid = toHex(fp.substr(fp.length - 8, 8));
+                //var pkt = String.fromCharCode(0x99) + String.fromCharCode(len >> 8) + String.fromCharCode(len & 255) + decoded.substr(k, len);
+                //var fp = SHA1(pkt);
+                //this.fp = toHex(fp); 
+                //this.keyid = toHex(fp.substr(fp.length - 8, 8));
                 this.type = "ELGAMAL";
                 found = 3;
 
@@ -325,6 +341,7 @@ function publicKey(key) {
             } else {
                 i = k + len;
             }
+
         // If we have a UserID packet
         } else if (a == 13) {
             // Parse out UTF-8 string of info
