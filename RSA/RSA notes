@@ -1,38 +1,42 @@
 RSA notes:
+  http://www-ict.tf.uni-kiel.de/atl/RSA/tutorial.html
+  http://stackoverflow.com/questions/544433/how-do-you-verify-an-rsa-sha1-signature-in-python
 
-http://www-ict.tf.uni-kiel.de/atl/RSA/tutorial.html
+Private Key:
+  n, d
 
 Public Key:
-n, e
+  n, e
 
 Signature:
-z == m^d % n
+  z == m^d % n == 0x90e2b728965eda1741eeece031f4ebc543e0b1b847af92e6d1a44017512a3592afbd32307b0207199d8bbcaa9c15a2c96167826526f928ef080475f2d1aee0d4ae0795251023f9be2d9f515dbae460043e4f29f381eea7cec92f7fbf78821fb06bf35a18fe87700f48ecb998a6a6cca9b57689f7529d73d64017103f7da2ffc7
 
-Int rep of message digest == y 
+  # m == hash of message
+  m1 = H(M)    == 0x0a0a072e30eb31ee65520632e7b361509f91215c1569d477a68fb6e8294b4366
 
-y = z^e % n
+  e = 0x010001
+  n = 0xba806e27852e81f046d939fa9859504c884a628d5e270fc43a54f2d162529a93f07899f38ff7d6f6133316cb0544167c2d67ebdcc542a8812679a00a43068a7b18f41d777503f60ef50bd66eaf0680c401944350cc228bd2c7b11e0d8688f6fd5b5b664c9e716aa1749e7a0eaa787e4d9fcb6702d0d07d2a14c48f597f02f731
 
-y = pow(z,e,n)
+  # m2 is really after the last null byte (00)
+  m2 = z^e % n 
 
-"""
-z = 0x90e2b728965eda1741eeece031f4ebc543e0b1b847af92e6d1a44017512a3592afbd32307b0207199d8bbcaa9c15a2c96167826526f928ef080475f2d1aee0d4ae0795251023f9be2d9f515dbae460043e4f29f381eea7cec92f7fbf78821fb06bf35a18fe87700f48ecb998a6a6cca9b57689f7529d73d64017103f7da2ffc7
-e = 0x10001
-n = 0xba806e27852e81f046d939fa9859504c884a628d5e270fc43a54f2d162529a93f07899f38ff7d6f6133316cb0544167c2d67ebdcc542a8812679a00a43068a7b18f41d777503f60ef50bd66eaf0680c401944350cc228bd2c7b11e0d8688f6fd5b5b664c9e716aa1749e7a0eaa787e4d9fcb6702d0d07d2a14c48f597f02f731
-"""
-z = 0x90e2b728965eda1741eeece031f4ebc543e0b1b847af92e6d1a44017512a3592afbd32307b0207199d8bbcaa9c15a2c96167826526f928ef080475f2d1aee0d4ae0795251023f9be2d9f515dbae460043e4f29f381eea7cec92f7fbf78821fb06bf35a18fe87700f48ecb998a6a6cca9b57689f7529d73d64017103f7da2ffc7
-e = 0x10001
+  # Raw m2
+  m2 == 0x1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003031300d0609608648016503040201050004200a0a072e30eb31ee65520632e7b361509f91215c1569d477a68fb6e8294b4366L
 
+  # Left 2 bytes => 0a 0a
+  # m2 split on null bytes
+  #
+  # >>> h.split('00')
+  # ['0x1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', 
+  #  '30313',                                                             # 197395
+  #  'd060960864801650304020105',                                         # 1031834358900975591463346897157
+  #  '042',                                                               # 66
+  #  '0a0a072e30eb31ee65520632e7b361509f91215c1569d477a68fb6e8294b4366']   # <=== Our hash value
 
-m = a682011f13360c1e4cc4ccb9e9d30d58f625948e027d7aad7ec4c084212bd7f0
+  # I think the other 00's were just coincidence, so it's really something like this (maybe)
+  # Either way it's the last x bytes of this value, where x == hash bits / 8 (or [hash bits / 8] * 2 characters)
+  #
+  # ['0x1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+  #  '3031300d06096086480165030402010500042',                             # 67170038900315392714302212428264322133655618
+  #  '0a0a072e30eb31ee65520632e7b361509f91215c1569d477a68fb6e8294b4366']   # <=== Our hash value
 
-
-
-// Lolbug
-768     768
-1280    1024
-1792    1536
-2304    2048
-2816    2560
-3382    3072
-3840    3584
-4096    4096

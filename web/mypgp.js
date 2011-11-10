@@ -429,6 +429,7 @@ function publicKey(key) {
                 // Count up packet lengths
                 i += decoded.charCodeAt(i) + 1;
             }
+
             // poor mans reset, stop caring about the rest of the bytes
             // which in this case is our r and s values for DSA. Big woop. 
             i = p
