@@ -1,82 +1,81 @@
-
 <html>
 
-<div id='output'></div>
 <script src="jsbn.js"></script>
 <script src="jsbn2.js"></script>
 <script src='sha256.js'></script>
 
 <script>
-var r = new BigInteger('912315f10cbeb6d1c9f7ca82dd25761edf04bb3188ed041131477ffbef51a289',16);
-document.getElementById('output').innerHTML = "<pre>R = " + r.toString(16) + "</pre>";
-var s = new BigInteger('6fc029e7694f2dbbe75f6737750831184eea03b87e7a6ef2f9d2057dc71e3d46',16);
-document.getElementById('output').innerHTML += "<pre>S = " + s.toString(16) + "</pre>";
-var p = new BigInteger('bc475b5080f1db157547a1e2481bebf3437b4a5edfe1b689612d6b67cc903be0675c98620f43af8115753d45bf9fe71d0454486acc6c6272adcf6b06fef41b1dfaeee284b8001bef31217ddb358defac61e971ac63b4e22aee8781645e56f8e310b98afea48341164bf25b9a8c99b4fc0e180afbae1df6380d40274df3b1637909d473a3e24f883baed51cbe9952a8fde7bf5678da4cfb406d881a0241a3ca701c861f65541d2a48d15efe1ed5c39d5500bcce474ae36b1e8d5bd9bf2dd4e6d9b645d2ce99183dce7537448ab04ae70f92d1178f70002e474bd3c4b9ccdd98851c73542f20761549b4e83e1fe1bb3fd3bed99ec4ed86e19f25729f530b1f6453',16);
-document.getElementById('output').innerHTML += "<pre>P = " + p.toString(16) + "</pre>";
-var q = new BigInteger('962acb37cec223fd1d7661e6a1a4045a97181f9ccce62c2de07d934f383b634d',16);
-document.getElementById('output').innerHTML += "<pre>Q = " + q.toString(16) + "</pre>";
-var g = new BigInteger('6ddba86c757474d759d95d9aff564417f0bab9d4de4bc907cf00b37f73e3a0ecd0a069b4fe270c5a765488bac85395bc36fa32fb7190730ab497b6979b18e839414422c9e61328c6f9d05e6aad0f1891d539a1d38874ca031e702a49280aad500164295c41bdf6566ee0d166c9366e4614672c87eb6084058c894bf3d800957b3e5ed3a284c628e953fbd470f6a3847344647fe4e018ee6602707656696f4032823f2381644ae96758f493ce02342ef005ef64e9b58fcc3866fca0489f59e635c6e59e418dc173ee6bdad6eaee5eacd8919f0334a5690e61b2bc0df32a179559faf2132069960d2be0bd496c2ce6ad5ce9d9d6db2064ddfbfc3bf8acf0a3e492',16);
-document.getElementById('output').innerHTML += "<pre>G = " + g.toString(16) + "</pre>";
-var y = new BigInteger ('4a239ed8fead4b7b22a7950eed67808355e63f6f5983b2c74f5aec4924f759f51cf058bd0688abbc38246a21d13dd58cb7dd0f538f610befe730e5193561d49d6547981c725a4528d541c1080eb716ef93216c0b3c1196e41c2c01696532ed4bac74e5deef9b29144ed42c26feb52592ec9e492838daf021b87b1802cb95d36f7b1e9eaae65f3921d2499fdad1b272f1dc746611129a1904a7f5ab2c72e3bd0fe14a3b7beb4b53550d9b11fdf9cd35dd4e46f70c0f4d6fb24ee305c60e297d805dc3a4ba53867c49e82259c081c05006d6a9c1f1687713bb1ab9bcc16cfec75faefbcc3e3b8ce13cc5dbb9ad379a16071c8a3677fc3838e12143fad06158263f',16);
-document.getElementById('output').innerHTML += "<pre>Y = " + y.toString(16) + "</pre>";
+// DSA
+  var r = new BigInteger('912315f10cbeb6d1c9f7ca82dd25761edf04bb3188ed041131477ffbef51a289',16)
+  document.documentElement.innerHTML = "<pre>DSA:</pre><pre>R = " + r.toString(16) + "</pre>";
+  var s = new BigInteger('6fc029e7694f2dbbe75f6737750831184eea03b87e7a6ef2f9d2057dc71e3d46',16)
+  document.documentElement.innerHTML += "<pre>S = " + s.toString(16) + "</pre>";
+  var p = new BigInteger('bc475b5080f1db157547a1e2481bebf3437b4a5edfe1b689612d6b67cc903be0675c98620f43af8115753d45bf9fe71d0454486acc6c6272adcf6b06fef41b1dfaeee284b8001bef31217ddb358defac61e971ac63b4e22aee8781645e56f8e310b98afea48341164bf25b9a8c99b4fc0e180afbae1df6380d40274df3b1637909d473a3e24f883baed51cbe9952a8fde7bf5678da4cfb406d881a0241a3ca701c861f65541d2a48d15efe1ed5c39d5500bcce474ae36b1e8d5bd9bf2dd4e6d9b645d2ce99183dce7537448ab04ae70f92d1178f70002e474bd3c4b9ccdd98851c73542f20761549b4e83e1fe1bb3fd3bed99ec4ed86e19f25729f530b1f6453',16)
+  document.documentElement.innerHTML += "<pre>P = " + p.toString(16) + "</pre>";
+  var q = new BigInteger('962acb37cec223fd1d7661e6a1a4045a97181f9ccce62c2de07d934f383b634d',16)
+  document.documentElement.innerHTML += "<pre>Q = " + q.toString(16) + "</pre>";
+  var g = new BigInteger('6ddba86c757474d759d95d9aff564417f0bab9d4de4bc907cf00b37f73e3a0ecd0a069b4fe270c5a765488bac85395bc36fa32fb7190730ab497b6979b18e839414422c9e61328c6f9d05e6aad0f1891d539a1d38874ca031e702a49280aad500164295c41bdf6566ee0d166c9366e4614672c87eb6084058c894bf3d800957b3e5ed3a284c628e953fbd470f6a3847344647fe4e018ee6602707656696f4032823f2381644ae96758f493ce02342ef005ef64e9b58fcc3866fca0489f59e635c6e59e418dc173ee6bdad6eaee5eacd8919f0334a5690e61b2bc0df32a179559faf2132069960d2be0bd496c2ce6ad5ce9d9d6db2064ddfbfc3bf8acf0a3e492',16)
+  document.documentElement.innerHTML += "<pre>G = " + g.toString(16) + "</pre>";
+  var y = new BigInteger ('4a239ed8fead4b7b22a7950eed67808355e63f6f5983b2c74f5aec4924f759f51cf058bd0688abbc38246a21d13dd58cb7dd0f538f610befe730e5193561d49d6547981c725a4528d541c1080eb716ef93216c0b3c1196e41c2c01696532ed4bac74e5deef9b29144ed42c26feb52592ec9e492838daf021b87b1802cb95d36f7b1e9eaae65f3921d2499fdad1b272f1dc746611129a1904a7f5ab2c72e3bd0fe14a3b7beb4b53550d9b11fdf9cd35dd4e46f70c0f4d6fb24ee305c60e297d805dc3a4ba53867c49e82259c081c05006d6a9c1f1687713bb1ab9bcc16cfec75faefbcc3e3b8ce13cc5dbb9ad379a16071c8a3677fc3838e12143fad06158263f',16)
+  document.documentElement.innerHTML += "<pre>Y = " + y.toString(16) + "</pre>";
 
-// Our hash;
-m = new BigInteger('97a75a8bf876aa13d0867fe50085343069a1af6e60f3956b044d8dc7efbd888c',16);
-document.getElementById('output').innerHTML += "<pre>M = " + m.toString(16) + "</pre>";
+  // Our hash
+  m = new BigInteger('97a75a8bf876aa13d0867fe50085343069a1af6e60f3956b044d8dc7efbd888c',16)
+  document.documentElement.innerHTML += "<pre>M = " + m.toString(16) + "</pre>";
 
-var start = new Date().getTime();
-w = s.modInverse(q);
-var end = new Date().getTime();
-var time = end - start;
-document.getElementById('output').innerHTML += "<pre>W = " + w.toString(16) +"</pre>";
+  w = s.modInverse(q)
+  document.documentElement.innerHTML += "<pre>W = " + w.toString(16) + "</pre>";
 
+  u1 = m.multiply(w).mod(q)
+  document.documentElement.innerHTML += "<pre>U1 = " + u1.toString(16) + "</pre>";
 
-var start = new Date().getTime();
-u1 = m.multiply(w).mod(q);
-var end = new Date().getTime();
-var time = end - start;
-document.getElementById('output').innerHTML += "<pre>U1 = " + u1.toString(16) +"</pre>";
+  u2 = r.multiply(w).mod(q);
+  document.documentElement.innerHTML += "<pre>U2 = " + u2.toString(16) + "</pre>";
 
-var start = new Date().getTime();
-u2 = r.multiply(w).mod(q);
-var end = new Date().getTime();
-var time = end - start;
-document.getElementById('output').innerHTML += "<pre>U2 = " + u2.toString(16) +"</pre>";
+  // Things break here on mobile browsers. :( not sure why...
+  a = g.modPow(u1,p);
+  document.documentElement.innerHTML += "<pre>A = " + a.toString(16) + "</pre>";
 
-// Things break here on mobile browsers. :( not sure why...
-var start = new Date().getTime();
-a = g.modPow(u1,p);
-var end = new Date().getTime();
-var time = end - start;
-document.getElementById('output').innerHTML += "<pre>A = " + a.toString(16) +"</pre>";
+  b = y.modPow(u2,p);
+  document.documentElement.innerHTML += "<pre>B = " + b.toString(16) + "</pre>";
 
-var start = new Date().getTime();
-b = y.modPow(u2,p);
-var end = new Date().getTime();
-var time = end - start;
-document.getElementById('output').innerHTML += "<pre>B = " + b.toString(16) +"</pre>";
+  c = a.multiply(b).mod(p)
+  document.documentElement.innerHTML += "<pre>C = " + c.toString(16) + "</pre>";
 
-var start = new Date().getTime();
-c = a.multiply(b).mod(p);
-var end = new Date().getTime();
-var time = end - start;
-document.getElementById('output').innerHTML += "<pre>C = " + c.toString(16) +"</pre>";
+  v = c.mod(q)
+  document.documentElement.innerHTML += "<pre>V = " + v.toString(16) + "</pre>";
+  document.documentElement.innerHTML += "<pre>R = " + r.toString(16) + "</pre>";
 
-var start = new Date().getTime();
-v = c.mod(q);
-var end = new Date().getTime();
-var time = end - start;
-document.getElementById('output').innerHTML += "<pre>V = " + v.toString(16) +"</pre>";
-document.getElementById('output').innerHTML += "<pre>R = " + r.toString(16) + "</pre>";
+  if (v.compareTo(r) == 0) {
+	  document.documentElement.innerHTML += "<pre>Yay match!</pre>"
+  } else {
+	  document.documentElement.innerHTML += "<pre>No match :(</pre>"
+  }
 
-if (v.compareTo(r) == 0) {
-	document.getElementById('output').innerHTML += "<pre>Yay match!</pre>";
+// RSA
+
+var z = new BigInteger('90e2b728965eda1741eeece031f4ebc543e0b1b847af92e6d1a44017512a3592afbd32307b0207199d8bbcaa9c15a2c96167826526f928ef080475f2d1aee0d4ae0795251023f9be2d9f515dbae460043e4f29f381eea7cec92f7fbf78821fb06bf35a18fe87700f48ecb998a6a6cca9b57689f7529d73d64017103f7da2ffc7',16);
+document.documentElement.innerHTML += "<br><pre>RSA:</pre><pre>Z = " + z.toString(16) + "</pre>";
+
+var e = new BigInteger('010001',16);
+document.documentElement.innerHTML += "<pre>E = " + e.toString(16) + "</pre>";
+
+var n = new BigInteger('ba806e27852e81f046d939fa9859504c884a628d5e270fc43a54f2d162529a93f07899f38ff7d6f6133316cb0544167c2d67ebdcc542a8812679a00a43068a7b18f41d777503f60ef50bd66eaf0680c401944350cc228bd2c7b11e0d8688f6fd5b5b664c9e716aa1749e7a0eaa787e4d9fcb6702d0d07d2a14c48f597f02f731',16);
+document.documentElement.innerHTML += "<pre>N = " + n.toString(16) + "</pre>";
+
+var md1 = new BigInteger('0a0a072e30eb31ee65520632e7b361509f91215c1569d477a68fb6e8294b4366',16)
+
+var tmph = z.modPow(e,n)
+document.documentElement.innerHTML += "<pre>tmpH = " + tmph.toString(16) + "</pre>";
+
+var md2 = new BigInteger(tmph.toString(16).substr(tmph.toString(16).length-64,tmph.toString(16).length),16)
+document.documentElement.innerHTML += "<pre>MD2 = " + md2.toString(16) + "</pre>";
+
+if (md1.compareTo(md2) == 0) {
+ document.documentElement.innerHTML += "<pre>Yay match!</pre>"
 } else {
-	document.getElementById('output').innerHTML += "<pre>No match :(</pre>";
+ document.documentElement.innerHTML += "<pre>No match :(</pre>"
 }
 </script>
-
-
-<!--<textarea rows=16 cols=30 id='test'></textarea>-->
 
 </html>
