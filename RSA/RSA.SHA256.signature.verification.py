@@ -10,11 +10,15 @@ n = 0xba806e27852e81f046d939fa9859504c884a628d5e270fc43a54f2d162529a93f07899f38f
 # Message digest (SHA256) of our message (Known right)
 md1 = 0x0a0a072e30eb31ee65520632e7b361509f91215c1569d477a68fb6e8294b4366
 
+# hlen == hash size length technically -2 for 0x and +1 for off-by-one errors, but combined
+# to just be -1 
+hlen = (len(hex(md1)) - 1)
+
 h = hex(pow(z,e,n))
 
-print "H = " + str(h[-65:])
+print "H = " + str(h)
 
-md2 = h[-65:]
+md2 = h[-hlen:]
 md2 = int(md2[:-1],16)
 
 print "MD1 = " + str(hex(md1))
