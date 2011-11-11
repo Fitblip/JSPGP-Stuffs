@@ -99,16 +99,7 @@ http://www.rfc-ref.org/RFC-TEXTS/2440/chapter5.html
 */    
 
 
-debug = false
-
-// Converts string => Hex
-function toHex(str) {
-    var hex = '';
-    for(var i=0;i<str.length;i++) {
-        hex += ''+str.charCodeAt(i).toString(16);
-    }
-    return hex;
-}
+debug = true
 
 function dec2hex(d) {
     var hex = Number(d).toString(16);
@@ -123,33 +114,36 @@ function dec2hex(d) {
 function publicKey(key) {
     // Check for header thing
     if (key.indexOf('-----BEGIN PGP PUBLIC KEY BLOCK-----') != -1 ) {
-        if (debug) {console.log('Key Found');}
+        (debug) && console.log('Key Found');
     } else {
-        if (debug) {console.log('No key found');}
+        (debug) && console.log('No key found');
         this.err = "No public key supplied!";
         return;
     }
 
     // Check for last tidbit, plus ending thing, and make sure they're in the right order.
     if (key.indexOf('\n=') != -1 && key.indexOf('\n') != -1 && key.indexOf('\n=') < key.indexOf('\n-----END PGP PUBLIC KEY BLOCK-----')) {
-        if (debug) {console.log('Valid key');}
+        (debug) && console.log('Valid key');
     } else {
-        if (debug) {console.log('Invalid key');}
+        (debug) && console.log('Invalid key');
         this.err = "Invalid Key!";
         return;
     }
 
-    // Compensate for the two \n chars and find our finish
-    start = key.indexOf('\n\n') + 2;
-    finish = key.indexOf('=\n');
+    // Make this a lot more fault tolarent
+    // Search and replace for Version:blahblahblah, and remove
+    // Then verify thta we chmop everything between begin and end
+    key = key.replace(/^Version.*\n$/m, '')
+    start = key.indexOf('-----BEGIN PGP PUBLIC KEY BLOCK-----\n\n') + 38;
+    finish = key.search(/\n=.*\n-----END PGP PUBLIC KEY BLOCK-----/);
 
     // Slice our key out
     key = key.slice(start,finish);
-    if (debug) console.log("Key start:finish => " + start + ":" + finish + "\n" + key);
+    (debug) && console.log("Key start:finish => " + start + ":" + finish + "\n" + key);
+    
 
     // Base64 decode our key 
     decoded = r2s(key);
-    if (debug) console.log("\nBase64 decoded;\n" +decoded);
 
     for (i=0; i < decoded.length;){
 
@@ -206,25 +200,34 @@ function publicKey(key) {
         // 6 == public key packet
         // 14 == subkey packet
         if(a==6 || a==14) {
+            if (debug) { if (a == 6) {console.log('Found Pubkey packet');} else {console.log('Found Subkey packet');}}
 
             // k = starting byte
             var k = i;
 
             // vers == next byte
             var vers=decoded.charCodeAt(i++);
+            if (vers != 4) {
+                (debug) && console.log('Key version => ' + vers);
+                this.err = "This only supports version 4 keys right now!";
+                return;
+            }
 
             // Set version to be returned
+            if (this.vers == undefined) {
             this.vers = vers;
+            }
 
             // Timestamp of creation
             var time = (decoded.charCodeAt(i++)<<24) + (decoded.charCodeAt(i++)<<16) + (decoded.charCodeAt(i++)<<8) + decoded.charCodeAt(i++);
 
             // Epoch => date conversion and localization
-            time = time * 1000;
-            date = new Date(time)
-            this.created = date.toLocaleString();
-
-
+            if (this.created == undefined){
+                time = time * 1000;
+                date = new Date(time)
+                this.created = date.toLocaleString();
+                (debug) && console.log('Created => ' + date.toLocaleString());
+            }
             // If valid == 0, valid key was found (Older keys only)
             if(vers==2 || vers==3) {
                 var valid=decoded.charCodeAt(i++)<<8 + decoded.charCodeAt(i++);
@@ -302,10 +305,6 @@ function publicKey(key) {
                 this.elgG = new BigInteger(a['g'].toString(),16)
                 this.elgY = new BigInteger(a['y'].toString(),16)
 
-                //var pkt = String.fromCharCode(0x99) + String.fromCharCode(len >> 8) + String.fromCharCode(len & 255) + decoded.substr(k, len);
-                //var fp = SHA1(pkt);
-                //this.fp = toHex(fp); 
-                //this.keyid = toHex(fp.substr(fp.length - 8, 8));
                 this.type = "ELGAMAL";
                 found = 3;
 
@@ -344,7 +343,7 @@ function publicKey(key) {
 
         // If we have a UserID packet
         } else if (a == 13) {
-            // Parse out UTF-8 string of info
+            // Parse out UTF-8 string of info, no need to do this twice
             if (this.user == undefined) {
             this.user = decoded.substr(i, len);
             }
@@ -384,27 +383,37 @@ function publicKey(key) {
                     exp = time + exp;
                     expdate = new Date(exp);
                     this.exp = expdate.toLocaleString();
+                // Read the *actual* preferred hashing algo
+                } else if (ar[0] == 21) {
+                    algos = new Object();
+                    algos[1] = "MD5";
+                    algos[2] = "SHA-1";
+                    algos[3] = "RIPE-MD/160";
+                    algos[8] = "SHA-256";
+                    algos[9] = "SHA384";
+                    algos[10] = "SHA512";
+                    algos[11] = "SHA224";
+                    // ar[0] == packet type, first value is probably the one picked
+                    this.hash = algos[ar[1]]; 
                 }
                 // Count up packet lengths
                 i += decoded.charCodeAt(i) + 1;
             }
 
-            algos = new Object();
-            algos[1] = "MD5";
-            algos[2] = "SHA-1";
-            algos[3] = "RIPE-MD/160";
-            algos[8] = "SHA-256";
-            algos[9] = "SHA384";
-            algos[10] = "SHA512";
-            algos[11] = "SHA224";
-            this.hash = algos[hash];   
-
             // If we can't find either of these, just set them to a dummy value
-            if (this.exp == null) {
+            if (this.exp == undefined) {
                 this.exp = "Never";
             }
-            if (this.hash == null) {
-                this.hash = "Unknown";
+            if (this.hash == undefined) {
+                    algos = new Object();
+                    algos[1] = "MD5";
+                    algos[2] = "SHA-1";
+                    algos[3] = "RIPE-MD/160";
+                    algos[8] = "SHA-256";
+                    algos[9] = "SHA384";
+                    algos[10] = "SHA512";
+                    algos[11] = "SHA224";
+                    this.hash = algos[hash];
             } 
 
             // Find out unhashed packet count, and do the same thing
@@ -431,7 +440,8 @@ function publicKey(key) {
             }
 
             // poor mans reset, stop caring about the rest of the bytes
-            // which in this case is our r and s values for DSA. Big woop. 
+            // which in this case is our signature values for DSA/RSA. Big woop. 
+            // Would be R/S for DSA, or Z [m^d % n] for RSA
             i = p
             i += len
         } else {
