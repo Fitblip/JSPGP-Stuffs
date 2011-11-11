@@ -1,0 +1,361 @@
+<html>
+<head>
+<style>
+.infos 
+{
+margin-left: auto;
+margin-right: auto;
+border: 1px solid #D4D4D4;
+border-spacing:0px;
+}
+
+.infos td {
+border: 1px solid #D4D4D4;
+}
+
+.hideme {
+display: none;
+}
+</style>
+
+<script src='md5.js'></script>
+<script src='sha1.js'></script>
+<script src='sha256.js'></script>
+<script src='base64.js'></script>
+<script src="jsbn.js"></script>
+<script src="jsbn2.js"></script>
+<script src='mypgp.js'></script>
+
+</head>
+<body>
+
+<div style="text-align: center">
+    <div class="textwrapper">
+        <form action="javascript:go()" name="t">
+          <input type="submit" value="Run Tests">
+        </form>
+    </div>
+</div>
+
+<div id="out" style="text-align: center"></div>
+<br>
+
+<!-- Storing our keys and known values, easier then escaping multi-line strings -->
+<div id='rsa1024' class='hideme'>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+mI0ETrmWmAEEALqAbieFLoHwRtk5+phZUEyISmKNXicPxDpU8tFiUpqT8HiZ84/3
+1vYTMxbLBUQWfC1n69zFQqiBJnmgCkMGinsY9B13dQP2DvUL1m6vBoDEAZRDUMwi
+i9LHsR4Nhoj2/VtbZkyecWqhdJ56Dqp4fk2fy2cC0NB9KhTEj1l/AvcxABEBAAG0
+IlJTQTEwMjRUZXN0IDxyc2ExMDI0dGVzdEBibGFoLmNvbT6IuAQTAQIAIgUCTrmW
+mAIbAwYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQYrVFfX8Q/YVe+QP/VtWe
+aqNzncFVFhrpq7r7tRQPTEvxZVaDgUm3PhgsivAc2NjWOEu9Ks5sjkKhJgnZkvJq
+NYyXWeiPKyunSMYW0fV2KO9QkwTkQ4bvwD75OTcmp+iHJ+VEjwPZa+VHWlgTDwDo
+mxHkmJhVTqvxQpfjGsw+dHjC5YXo8LUh8Tx8olC4jQROuZaYAQQAxlWMHZVcvHi6
+ITxXagZJ5jyKejBqP8F+2LqPC89vWI62RmGOeV0IbOsSjbBpxTml5luXfccd+oEE
+xGUag6Rl79YYrxOO5ezO8sU7+YvPc/aaM572Bra6T+fF3YaxadJnNfRMXmovB0Lz
+IGR9PI6hn18WpGMOzOEPTgC7Bz3YN7sAEQEAAYifBBgBAgAJBQJOuZaYAhsMAAoJ
+EGK1RX1/EP2Fm4wEALD5N5A4DCudKdDWpBZtLSsylNryL9FWWp3dm4S33cXRBFT5
+zAnrfBOuh4L5RIX/shm/ap9wCXgCwAr1c4F1DE1sDjzhlAF1oTURdijgBouRv+Mg
+6qBafzjHL9Cm41B05eCv6fdqgxYufsEsWyFCSGAsVTwtp0YF2hcnLlSURVPT
+=EnHr
+-----END PGP PUBLIC KEY BLOCK-----
+</div>
+<div id='rsa1024E1' class='hideme'>010001</div>
+<div id='rsa1024E2' class='hideme'>010001</div>
+<div id='rsa1024N1' class='hideme'>ba806e27852e81f046d939fa9859504c884a628d5e270fc43a54f2d162529a93f07899f38ff7d6f6133316cb0544167c2d67ebdcc542a8812679a00a43068a7b18f41d777503f60ef50bd66eaf0680c401944350cc228bd2c7b11e0d8688f6fd5b5b664c9e716aa1749e7a0eaa787e4d9fcb6702d0d07d2a14c48f597f02f731</div>
+<div id='rsa1024N2' class='hideme'>c6558c1d955cbc78ba213c576a0649e63c8a7a306a3fc17ed8ba8f0bcf6f588eb646618e795d086ceb128db069c539a5e65b977dc71dfa8104c4651a83a465efd618af138ee5eccef2c53bf98bcf73f69a339ef606b6ba4fe7c5dd86b169d26735f44c5e6a2f0742f320647d3c8ea19f5f16a4630ecce10f4e00bb073dd837bb</div>
+
+<div id='rsa2048' class='hideme'>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+mQENBE65luABCAC22N10qlVDtdt/FpOCBogqT9GzaFCOjweefQNnjRW+6RBaNrHe
+c0S9nAPvFQKYPJQSPaj5Jf9PxE5dbW1v4MGpFBRy95EuwIk6CHS5Ch0bABeP1dJK
+Ualiw8Um1neZzAdg80xSPLis4ZZMG7v3MdQ/XTe7YkizVw9dHjylsvG8FoL14Sd3
+fbiUe3DJmLz0M7nh31FIapd5ZR+B3XmfBXN00hc6UCOlmL+bWFvIdEOXIs7xJOs8
+XsZb5W5uHkBF12ofmUL69gdta0Z73L8wiIQ5vOFPMJW8N3ufa8G7bdJ4BRKw2KVR
+zkTu1vsJm06ncYkqXiozBQefO7j8Rwp5i5hLABEBAAG0IlJTQTIwNDhUZXN0IDxS
+U0EyMDQ4VGVzdEBibGFoLmNvbT6JATgEEwECACIFAk65luACGwMGCwkIBwMCBhUI
+AgkKCwQWAgMBAh4BAheAAAoJELp3+MHGrgQeqf4H/RdfOXVDv/3L1JvWHbCi8e+W
+P/evtl76j48KbuUIeoheTwJ5M+fAS5Bs57i7ntHVWzqQckO+Y3/s0XNOLwEbOCjW
+QVPKclQlRR5sbs8OkMzHitVNLkk8OCfKKLt9dVISivt5zbZexm8LzZLm4upXUZV+
+5ZxMU3KbcSJbp/SndkfyO6PGHAh/I3EsUzbKmcOIXh4Q7qA25gtumNB/mcrT8wzR
+yOwH1F0yU3C0LIzbaBsIqN8Jh6wyxsIpnbsuWNTYblzr1CGcHJYZoQc9LUTDdWR4
+0jP1FHXD0T4qtuInlwVoJpTZ5iIUFIBCfIDKHcbmdMX/AiXST4s9uqsHGoYhpKm5
+AQ0ETrmW4AEIALbN40X7OONgVrxiWT5MeEsAKqEfDXfJwDhcqyzj0bcMfxKuupkD
+8pbRjMZ4Mavhh6Qibp8rdxmPFqRcQQlc02i/fSQptATx+SdjpNJ2ueKW+kPHMidq
+7BJur2g0wwxKpF0TdQyWpN9J9pSpJMXBCUh4TqKi6nGFYc538b4EFITWLjgaNwKh
+JvmGW1IscjJXI7758VUKWhKMDjNKRbYPm/ZfTl77uXSgRzJUoZntsbCQ5yNLacdr
+4BvANFRD7IoYi0SPT/Kyjg3ptXGYJtVWpZbWByHt3OmTx5qCm09AGeVhqiNy536B
+WduyrAgUSoxuz2kOY12l9m/NhELeWnlg+QEAEQEAAYkBHwQYAQIACQUCTrmW4AIb
+DAAKCRC6d/jBxq4EHqXKCACsZmOlOEDiEZrcJ9FNtnQ1wYQC49CrQuuNeD3ouvbH
+9O68fe0NXJxqMymueCa5lqxA5XiO3stUvoJPDyJ8oUoGYOPjOiVXoHZrIVOVznYk
+A+AEJObTIUbtfTijN4B4/BLHO5U3tyZ0Fc4QX3ClDYW1nJuTec9k5NSLZHshJiiC
+3zbLxbGoPHqCp0SrhwnN3q9ZHGzKNRYtmWzvJK/yYGrslHTl8OAiWTwXyilT3Qpe
+F6pvLVJmja5qku1BPrGQjK+VGTXUNAJZVkCAeSSi4oCn7FsIaye3B/dulnu5xBSx
+Af1WX2COwIRW5u0lOUn4/RFBtjI+oLBkuZnERQtVhwp2
+=jpOW
+-----END PGP PUBLIC KEY BLOCK-----
+</div>
+<div id='rsa2048E1' class='hideme'>010001</div>
+<div id='rsa2048E2' class='hideme'>010001</div>
+<div id='rsa2048N1' class='hideme'>b6d8dd74aa5543b5db7f16938206882a4fd1b368508e8f079e7d03678d15bee9105a36b1de7344bd9c03ef1502983c94123da8f925ff4fc44e5d6d6d6fe0c1a9141472f7912ec0893a0874b90a1d1b00178fd5d24a51a962c3c526d67799cc0760f34c523cb8ace1964c1bbbf731d43f5d37bb6248b3570f5d1e3ca5b2f1bc1682f5e127777db8947b70c998bcf433b9e1df51486a9779651f81dd799f057374d2173a5023a598bf9b585bc874439722cef124eb3c5ec65be56e6e1e4045d76a1f9942faf6076d6b467bdcbf30888439bce14f3095bc377b9f6bc1bb6dd2780512b0d8a551ce44eed6fb099b4ea771892a5e2a3305079f3bb8fc470a798b984b</div>
+<div id='rsa2048N2' class='hideme'>b6cde345fb38e36056bc62593e4c784b002aa11f0d77c9c0385cab2ce3d1b70c7f12aeba9903f296d18cc67831abe187a4226e9f2b77198f16a45c41095cd368bf7d2429b404f1f92763a4d276b9e296fa43c732276aec126eaf6834c30c4aa45d13750c96a4df49f694a924c5c10948784ea2a2ea718561ce77f1be041484d62e381a3702a126f9865b522c72325723bef9f1550a5a128c0e334a45b60f9bf65f4e5efbb974a0473254a199edb1b090e7234b69c76be01bc0345443ec8a188b448f4ff2b28e0de9b5719826d556a596d60721eddce993c79a829b4f4019e561aa2372e77e8159dbb2ac08144a8c6ecf690e635da5f66fcd8442de5a7960f901</div>
+
+<div id='rsa2560' class='hideme'>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+mQFNBE65nFkBCgDd9Y1BBWiFQduBAaB3nhQOX/xuaZHxkJ0yqghivVbXDX1K1pAU
+yRhMcjx26URD+5TKaoOYjBhDF0yITds9g1Ox6dAIxN6MFkhEfuW8gglauHkejttm
+FT+PiDKPzYwfMWNB3iDdIi7PWyqFd+qcy7TizTP1ED23WzEUPNrQdjF8pnitRycl
+pRowt8jMjhDae/p0tVPcHi1n1t9s0MtatY/H2d1TaXFiBYR2y9yKhFtUe2aLqANe
+ou4XpLimC/mL4sELI+dfN+c0QGYoUqEKZS7vppfjiHzidjG4TeO7hjKTvJOqp8ze
+DDkaUzb+ii51+1R4IRIo5jP79mvzpuL1zQcyCl9CP3wnkyXImlXT3Nksq3zJ6xIL
+Ajp5hw2g08vBE8ekNC489gy6AHYLZwZcFlSq00oJKgQp5hEXLGG2bRzl9QARAQAB
+tCJSU0EyNTYwVGVzdCA8UlNBMjU2MFRlc3RAYmxhaC5jb20+iQF4BBMBAgAiBQJO
+uZxZAhsDBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRBUF3gXP0tNsA5MCgCM
+r3hjSw234OCVHv5CWGy31ycaw1bHa3TRaQfo2MhmBOM3hW7r7RYiP5TNdApimIa3
+OSkQHLrnujMY2Smg1/1jZSHes6QNl4h8kwl4D/A6dqT9qVykMYdldeGzHAJYNOM0
+69ikYqA9HinN9vpZ1DBfsbxf3Osqdg8oRqb2wg0RgRtCYy3dgNy+QIjEvC56p6tN
+eHoISHclHy+obravLOcNv3swkFqGmApcMAmXwTS7NCLitCzAEJGid4AICCwbbGqc
+w7XxJDxJxx2y7gnuL0L3lBiEqfATCBjz0OPSwl14RyWNLPdoIbiFwO1dkb2Ds3mv
+W+DCvT2OlCL96TPoJxMwBIHbmXlWts8FG0fH6DMcuObbs6C7cAUj+y5VJPy+/nL8
+PIo+Ag74GyEv8ITY5FRBBCdRt5+/pBWR5Qhk/r40+rkBTQROuZxZAQoAlCd1ckvl
+GuepgfPL3txImqEFFCZLq5w5ghgfFBNWy2O37kX3Ef1wpDhzEIRdHgKgflPtbzl0
+uKsBWIrGUUx4hodU76qT6TdFHg0IYmWQpOMbVergp3UYZm3NVtlPYgod1u6u0B4s
+bTfAhzK2FHQd2nvjcKZC3Es4y40a5+8r9Dns6u5uRDgTs72CaVoPYUDEfiQskwXz
+5Qcz/KKeNVCi/jk4IFCTMbFMwZAcZgBZVbl6HLZOz1ux/7XwA/THIlip/TPGfcBd
+mXRow6XoMnzvhgf5N83rYmCJIuihYIVNbUUIgOeaAMD9YG5h0TcS3lOwdGJAE40w
+KxrHK7hBsrqOptxDw6xZMtuiBZnz5rvTYy+/pNbEsUEA2pKuihESVx/Wd6fkRmtp
+OvKhZPpzy73Fic/smv+sR+YtddJh4ybkyDcAEQEAAYkBXwQYAQIACQUCTrmcWQIb
+DAAKCRBUF3gXP0tNsDHLCgDUGtId53NWpX/EG1cMIWyTAibdYYXzSXPAe46pXP7x
+U13h3dYEiARwd6C70niceG7WWaZi9V6h3ERbPk8gGV0LeX9i0NAPQlXFMsoHsFNQ
+xjFLAC4a197+gOSXYkrHCzOdMfyK4QszEqtSaIhyj3cyQRUXxiOXXmQ+o//5Axuz
+u+9GOHAq+e/CUoTMu1ffeVC3YNTR7PFe3OLZ2fxj1GyzqUi1wIq771qIbIiQU0Mq
+Nul43HwHDnSvqBo/DSCa0zSdWGI2jJIXQXgrCugZr8KUDWKtjIiGpDVoTbBoQ3ue
+lHeQby/t+uRnKsU007nS8loYeVoNW1HxIq0jXHwxG7UhabFP3RV4Qg3RsMtwrJjK
+AiWni8F8fDpuMFzi8UjlUbB/K4EUcVoDK8vA82O/Z5pyYEgReYentjPMjISiL9NT
+sw==
+=rpd+
+-----END PGP PUBLIC KEY BLOCK-----
+</div>
+<div id='rsa2560E1' class='hideme'>010001</div>
+<div id='rsa2560E2' class='hideme'>010001</div>
+<div id='rsa2560N1' class='hideme'>ddf58d4105688541db8101a0779e140e5ffc6e6991f1909d32aa0862bd56d70d7d4ad69014c9184c723c76e94443fb94ca6a83988c1843174c884ddb3d8353b1e9d008c4de8c1648447ee5bc82095ab8791e8edb66153f8f88328fcd8c1f316341de20dd222ecf5b2a8577ea9ccbb4e2cd33f5103db75b31143cdad076317ca678ad472725a51a30b7c8cc8e10da7bfa74b553dc1e2d67d6df6cd0cb5ab58fc7d9dd53697162058476cbdc8a845b547b668ba8035ea2ee17a4b8a60bf98be2c10b23e75f37e73440662852a10a652eefa697e3887ce27631b84de3bb863293bc93aaa7ccde0c391a5336fe8a2e75fb5478211228e633fbf66bf3a6e2f5cd07320a5f423f7c279325c89a55d3dcd92cab7cc9eb120b023a79870da0d3cbc113c7a4342e3cf60cba00760b67065c1654aad34a092a0429e611172c61b66d1ce5f5</div>
+<div id='rsa2560N2' class='hideme'>942775724be51ae7a981f3cbdedc489aa10514264bab9c3982181f141356cb63b7ee45f711fd70a4387310845d1e02a07e53ed6f3974b8ab01588ac6514c78868754efaa93e937451e0d08626590a4e31b55eae0a77518666dcd56d94f620a1dd6eeaed01e2c6d37c08732b614741dda7be370a642dc4b38cb8d1ae7ef2bf439eceaee6e443813b3bd82695a0f6140c47e242c9305f3e50733fca29e3550a2fe393820509331b14cc1901c66005955b97a1cb64ecf5bb1ffb5f003f4c72258a9fd33c67dc05d997468c3a5e8327cef8607f937cdeb62608922e8a160854d6d450880e79a00c0fd606e61d13712de53b0746240138d302b1ac72bb841b2ba8ea6dc43c3ac5932dba20599f3e6bbd3632fbfa4d6c4b14100da92ae8a1112571fd677a7e4466b693af2a164fa73cbbdc589cfec9affac47e62d75d261e326e4c837</div>
+
+
+<div id='rsa3072' class='hideme'>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+mQGNBE65nPIBDADOz02AOO2vPfgaDFC4zlaVrrCgW9OGnevrKvRKFAKaQxXl29Sp
+J6iE+zMX1ycWx9PDPDjXfcoqoYSKh1RWwkt61IJysqhPoHYXMA8iSnzbE2cm366v
+WGxopzzFiBw5mZ1Jewj19Z02VahxL8RGIUhzG/V5LJ4MuSLXaqVeRaRRtFBEQO/v
+31W/3brfRmuCYGStRKXaReuRIXyUKPeDzVRnxmgs+oaQ3xSQSSPhJW4Hvarc87dV
+vEWwcKrLHGehbe9510g3u98U0bvOuXYnakmMbMILk4JnilN/EF+8oBloQ9LbBce7
+S1lTgFzi2IT1bq+9iEHQSCSk7Dvb1iitm7vVgmJEF2+muf8AAt0uV98l3plVW/La
+vbKt1+swVMSmOtriZHufktrEhhbwH9fJMJTvOnf+HYxKcTxdLymY3ZYBVi6ft8un
+vOuqb8VpK7jQM7/2XqQ45KCvwH1EDl1d1AOj49/+TRdl52qm91sA+FHHjqGLKg0u
+d94LV4fs01OqLpMAEQEAAbQiUlNBMzA3MlRlc3QgPFJTQTMwNzJUZXN0QGJsYWgu
+Y29tPokBuAQTAQIAIgUCTrmc8gIbAwYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AA
+CgkQaziylk8MtGBVMAv/fEB+6FpQw3JP7i6WGyrD0VV02DD79YO7TCNXORCRnEfE
+pRXAFdwmwi/DODlRbRFucwfgyglRuXxn0VLMe2/Be8jONHnUuik5VJ9NbaCi+8yY
+C52QN6CHG6Kv/1rnZu9EhhvoWsOWIPXTwxw+6NMkqiPwyOMQA3tDGugnldpcm137
+7RF+pnCCWFkO/6+QbJWfa1+3pJafmzhs/A+KRE+qoHyWm2WIe3561AyFLzE6dCgN
+WeksNdoh8meDG4RWp04H4ifGj0R5Wlz5ww9XKquhoIKD3SU6dyzSfjQ0b50rGUSv
+U2kg4yuBQ0ThvAgCfzi27nAAnmS+WenP3xCak7Qui+GTF5LYSipkkJUq6CZN7QgT
+ly2vS1eop9X4NTOSoIhD0UNtz0m56f6sUUVkQOsL/Bpdn5F3t5v4V2hoXimrgsDa
+GpacVpgU2T+oOTCVE/A/GhvYyof/TeGBquKNI2jQOnfmM41BAkW0TxObauDrC0UW
+c796r6ioKo4NA2mAmdfruQGNBE65nPIBDADja4SKLT1+T39y/U8u9eH0z682pBYZ
+Q7E5fE4CCGZiI/u2bXTJ/yWb7tBaReqIJTeZMbF+tN0c/5Rudxe8gaW5JuVdl2HD
+8oDHTMbbcW+7oH6u6u6svHUlIhKAeKPXG17diudo58pdsc9A13PI/E99s4IbMmQP
+PeyNh1cb9btIbQQnBzl7ulKOKmUG4ePRviotOuglM+Rf4SdtfdXwLHXAH0hT1s9v
+94W4TRF7dbHnRHYgk4EBIKvZDJH243hI+R4uNo4Gl2YYeg/T+7eoaMDDoysTDN6P
+8Cn39ZeNbPEve6fymPRZqLi1fLLUK8L3pK9mzyo+xZ41EkifW4yyhRQL6UKpD6gY
+9xP23ht0+DfhubnwDelKvJlrD8lEMvmVcSW+IBZEVPGUEiUDqc56ycReIGElOxWc
+F9EMgtmrAJLLGTOxqSaVypkSlfN7Sm8Xbt118WlIZZ7QfIiequL2d0/+aw1m7rim
+QSLaRGHuJd4ix8d44X5VkoahB8wE2UdfYgsAEQEAAYkBnwQYAQIACQUCTrmc8gIb
+DAAKCRBrOLKWTwy0YIntDACb/kN8KmqJt48iJzqke/A9qn0LOtq1JRhqC8w5tweh
+YQ2oEgwdRG84WZGzPKqiNNUP3JTwgaY3zWTw/ixgA+kq4sRqolAT+RcD9GQdUMlf
+Sr7udltPfsLJDNE+lEG+cqAtxNfBFzhjPP/4JRZgF4v9wf3uHVVNr1CEGEnlOdg6
+WNQghn+HlfNUAa5ql80Da7r2+xutjjW0eLOOf5bbooqCZtQ68cYx+xL6EAyluy6J
+Oh8I1jfTGgVQ1cUk4ae7Nzd6RV1GjnE/DU5auv360Zy6lczCy+ULmsERwNG/3ebb
+/Sm3tJYVe9fObJnO4N8ESuoJ4Wf9CHtg5PgiVtuDrRZt6gA/Ufa+nk2ntufLp5Lt
+HQMbFIhTFFmTxW1WQw4At1WNBs57zMiDC9W+JWcYWfjtEuAcrzx4X6uha1iFLsoE
+ybobQvx3k1bbePGp6hO0I6eBZV2LJGfFBkjp9SXpHSg/zHl+0I7dkeXEhNq55S51
+GsVrMFNLqUHY/K/dUubWy+o=
+=6G0b
+-----END PGP PUBLIC KEY BLOCK-----
+</div>
+<div id='rsa3072E1' class='hideme'>010001</div>
+<div id='rsa3072E2' class='hideme'>010001</div>
+<div id='rsa3072N1' class='hideme'>cecf4d8038edaf3df81a0c50b8ce5695aeb0a05bd3869debeb2af44a14029a4315e5dbd4a927a884fb3317d72716c7d3c33c38d77dca2aa1848a875456c24b7ad48272b2a84fa07617300f224a7cdb136726dfaeaf586c68a73cc5881c39999d497b08f5f59d3655a8712fc4462148731bf5792c9e0cb922d76aa55e45a451b4504440efefdf55bfddbadf466b826064ad44a5da45eb91217c9428f783cd5467c6682cfa8690df14904923e1256e07bdaadcf3b755bc45b070aacb1c67a16def79d74837bbdf14d1bbceb976276a498c6cc20b9382678a537f105fbca0196843d2db05c7bb4b5953805ce2d884f56eafbd8841d04824a4ec3bdbd628ad9bbbd5826244176fa6b9ff0002dd2e57df25de99555bf2dabdb2add7eb3054c4a63adae2647b9f92dac48616f01fd7c93094ef3a77fe1d8c4a713c5d2f2998dd9601562e9fb7cba7bcebaa6fc5692bb8d033bff65ea438e4a0afc07d440e5d5dd403a3e3dffe4d1765e76aa6f75b00f851c78ea18b2a0d2e77de0b5787ecd353aa2e93</div>
+<div id='rsa3072N2' class='hideme'>e36b848a2d3d7e4f7f72fd4f2ef5e1f4cfaf36a4161943b1397c4e0208666223fbb66d74c9ff259beed05a45ea8825379931b17eb4dd1cff946e7717bc81a5b926e55d9761c3f280c74cc6db716fbba07eaeeaeeacbc752522128078a3d71b5edd8ae768e7ca5db1cf40d773c8fc4f7db3821b32640f3dec8d87571bf5bb486d042707397bba528e2a6506e1e3d1be2a2d3ae82533e45fe1276d7dd5f02c75c01f4853d6cf6ff785b84d117b75b1e744762093810120abd90c91f6e37848f91e2e368e069766187a0fd3fbb7a868c0c3a32b130cde8ff029f7f5978d6cf12f7ba7f298f459a8b8b57cb2d42bc2f7a4af66cf2a3ec59e3512489f5b8cb285140be942a90fa818f713f6de1b74f837e1b9b9f00de94abc996b0fc94432f9957125be20164454f194122503a9ce7ac9c45e2061253b159c17d10c82d9ab0092cb1933b1a92695ca991295f37b4a6f176edd75f16948659ed07c889eaae2f6774ffe6b0d66eeb8a64122da4461ee25de22c7c778e17e559286a107cc04d9475f620b</div>
+
+<div id='rsa4096' class='hideme'>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+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
+Hw==
+=jwYn
+-----END PGP PUBLIC KEY BLOCK-----
+</div>
+<div id='rsa4096E1' class='hideme'>010001</div>
+<div id='rsa4096E2' class='hideme'>010001</div>
+<div id='rsa4096N1' class='hideme'>d066bfdacb333dce280c94615565db6d39e3f3954c9cbf14ce9148a9f5fe6157934cf150dec0dda72598271ba97ef7ea33d2b909c8e832c7c1ce99979176847b960b41ddc7d832916bb0e3990485d6236c21c8cf62fd43c255f26e253f537deedc9f02568a4bc8a50e35f4936a7d2a84de7dcbd4003beb84605f7e8995694f0c5f067e72da7d4d1f195fa75e88b1db6e9c5648c8fb617f6e368acc84bbcd9f3581924ed09cb8296b4747fde5377cfedaa9a8abc44a44a679e7e3832514b84e034c00c9017f37b70bbc0146093858a9f649a5b5f75c21052892b4fbe17ad2a4e095eb6f891f75678f5b12659fd19891b6960a0ebb90d3a2d85237ba3f5833b8113288a74c9c9ae331c3125ab2682612c0959354c22791872babd842cb5c495e67e3c83d18bfacfb7acc3ea0d53a799c8a8fddf7cfaa71eaf144c255f32230841e34055b2072849d94d9417d903c86c3a0d65ebaf2b445863a098140f55729ca06016a104c9e539c0444f30f3e097758d9751a8271d3f2890a11af5e29b96d0a4396998e62566059954c8115e1046e14cb68701a11727f9887fabcacf55cba5b7590971a3110377c219204a84a362789c153a4a2b426007905046d12907f4221b1afc89d40c8136d99c99c4379407ddc31d024904cc6481ab4879c882f4efbd8fa5ba236766ff91ad558137833a31795faf31c5616c311e8ee24a02770601f6c43</div>
+<div id='rsa4096N2' class='hideme'>c42733156d2341d208f1585680738c2ab9c2bb57b80ade6c9c0bac58931dc2cbe93ce9114554639eaf20c403280f5f18f5ddb9d0ef4ff6e335729664765fc9b9b1e9c41074e009acc72016d9967879ad64f85e5d217785d7b36ae8733d4867be51441235f992fb1da479e897d07aa98cf392ad7a9052985ff9efea2667433e17b8a9c3c0296d5d9c67495bf956f552816b0d07f7d9e001578697039316e83539b80c02f4f1f1fd6335c0ec0a1476cc346904147ed7a53a038ee2795f1173589d033b3bb1f55dcf486e8a119a7e032a973c95ef19166ad6f4df0a22eba926985cd75dc75eef11974d7f775a5ccf8ddb38667549cf657fc65ee879c6e6bb24251d407c2f85a98ab6dda0afa29ce19eb0d412a6e2cb437285294fe9446c0442764def4023666515437bf3275f75028898be286bd7d5b5f1228ee69a9cff99a133493619d50ca2965dfec0d6e44952a6e7be391fefa6d39424a94579a1616ae1bd02fa4e24f56c11bfb787bdc17fdf3bda813109e3aa9873b30b8889916ccd3d400abfc3e22e6ec2fff06fe4855446de0f74f45adefd2a82b697f48dbeefc8a2f2f68b7ced36d78e7b6f85b73bd846ed4e307998c1df09a4a51198f311738b2100232af6f1ce8b6b929baac09585cdc19a34b809c5dc140bef0f04b26b656399c945e45c7532e1517133a177bb2baffc00bb30247353832b94d454f2257a149472a1</div>
+
+<script>
+function go() {
+pubkey(1024);
+pubkey(2048);
+pubkey(2560);
+pubkey(3072);
+pubkey(4096);
+}
+
+function pubkey(size) {
+  key = document.getElementById('rsa' + size).innerHTML
+  info = new publicKey(key);
+
+  user        = info.user
+  user        = user.replace('<','&lt;').replace('>','&gt;')
+
+  created     = info.created;
+  expires     = info.exp;
+  prefhash    = info.hash
+  type        = info.type
+
+  keyid       = info.id
+
+  enckey      = info.pkey
+  version     = info.vers
+
+  rsaN1 = new BigInteger(document.getElementById('rsa' + size + 'N1').innerHTML.trim(),16)
+  rsaN2 = new BigInteger(document.getElementById('rsa' + size + 'N2').innerHTML.trim(),16)
+  rsaE1 = new BigInteger(document.getElementById('rsa' + size + 'E1').innerHTML.trim(),16)
+  rsaE2 = new BigInteger(document.getElementById('rsa' + size + 'E2').innerHTML.trim(),16)
+ 
+  if ( rsaN1.compareTo(info.rsaN) == 0) { 
+    a = '<tr><td>RSA Primary N Value</td><td><font color="green">PASS</font></td></tr>'
+  } else {
+    a = '<tr><td>RSA Primary N Value</td><td><font color="red">FAIL</font></td></tr>'
+  }
+
+  if ( rsaN2.compareTo(info.rsasubN) == 0) { 
+    a = a + '<tr><td>RSA Secondary N Value</td><td><font color="green">PASS</font></td></tr>'
+  } else {
+    a = a + '<tr><td>RSA Secondary N Value</td><td><font color="red">FAIL</font></td></tr>'
+  }
+
+  if ( rsaE1.compareTo(info.rsaE) == 0) { 
+    a = a + '<tr><td>RSA Primary E Value</td><td><font color="green">PASS</font></td></tr>'
+  } else {
+    a = a + '<tr><td>RSA Primary E Value</td><td><font color="red">FAIL</font></td></tr>'
+  }
+
+  if ( rsaE2.compareTo(info.rsasubE) == 0) { 
+    a = a + '<tr><td>RSA Secondary E Value</td><td><font color="green">PASS</font></td></tr>'
+  } else {
+    a = a + '<tr><td>RSA Secondary E Value</td><td><font color="red">FAIL</font></td></tr>'
+  }
+
+  out = document.getElementById('out');
+
+  out.innerHTML = out.innerHTML + 
+                  '<table class="infos" style="width:60%;">' + 
+                      '<tbody>' + 
+
+                          '<tr>' + 
+                              '<td>' + 'User info' + '</td>' +
+                              '<td>' + user + '</td>' +
+                          '</tr>' + 
+
+                          '<tr>' + 
+                              '<td>' + 'Created' + '</td>' +
+                              '<td>' + created + '</td>' +
+                          '</tr>' + 
+
+                          '<tr>' + 
+                              '<td>' + 'Expires' + '</td>' +
+                              '<td>' + expires + '</td>' +
+                          '</tr>' + 
+
+                          '<tr>' + 
+                              '<td>' + 'Preferred Hashing Algorithm' + '</td>' +
+                              '<td>' + prefhash + '</td>' +
+                          '</tr>' + 
+
+                          '<tr>' + 
+                              '<td>' + 'Key Type' + '</td>' +
+                              '<td>' + type + '</td>' +
+                          '</tr>' + 
+
+                          '<tr>' + 
+                              '<td>' + 'Key ID' + '</td>' +
+                              '<td>' + keyid + '</td>' +
+                          '</tr>' + 
+
+                          '<tr>' + 
+                              '<td>' + 'Key Version' + '</td>' +
+                              '<td>' + version + '</td>' +
+                          '</tr>' + a + 
+                      '<tbody>' + 
+                  '</table><br>';
+    return
+}
+
+</script>
+</body>
+
+</html>
