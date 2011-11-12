@@ -110,6 +110,121 @@ function dec2hex(d) {
     return hex;
 }
 
+// Parses out our email text properly into a format primed for hashing
+function parseText() {
+    var stuffs = document.getElementsByName('pubkey')[0].value
+    stuffs = stuffs.split('\n')
+
+    for (i=0;i<stuffs.length;i++) {
+        if ( stuffs[i].search(/^Hash.*$/) != -1) {
+            start = i
+        }
+    }
+
+    hash = stuffs[start].split(" ").pop()
+    start = start + 2 
+    end = stuffs.indexOf('-----BEGIN PGP SIGNATURE-----')
+
+    hashme = '';
+    for (i=start;i<end;i++) {
+        if (stuffs[i] == "") {
+            stuffs[i] = '\r\n\r\n'
+            hashme += stuffs[i]
+            console.log(i)
+        } else {
+            hashme += stuffs[i].trim()
+            console.log(i)
+        }
+    }
+}
+
+// Parse out the signature part of our message for concatination with our msg text
+
+// TODO needs some fixing at some point, sloppy coding
+function parseSig() {
+    var stuffs = document.getElementsByName('pubkey')[0].value;
+    stuffs = stuffs.replace(/^Version.*\n$/m, '');
+    start  = stuffs.indexOf('-----BEGIN PGP SIGNATURE-----\n\n') + 31;
+    end    = stuffs.search(/\n=.*\n-----END PGP SIGNATURE-----$/);
+    sig = stuffs.slice(start,end);
+    var sigdecoded = r2s(sig);
+
+    for (i=0;i<sigdecoded.length;i++) {
+        if (dec2hex(sigdecoded.charCodeAt(i)) == '04') {
+            version = dec2hex(sigdecoded.charCodeAt(i++))
+            sigtype = dec2hex(sigdecoded.charCodeAt(i++))
+            pubalg  = dec2hex(sigdecoded.charCodeAt(i++))
+            hashalg = dec2hex(sigdecoded.charCodeAt(i++))
+            size1   = sigdecoded.charCodeAt(i++)
+            size2   = sigdecoded.charCodeAt(i++)
+            sizetotal = ((size1<<8) + (size2)) 
+            var ar = new Array();
+            for (b=0;b<sizetotal;b++) {
+                psize   = dec2hex(sigdecoded.charCodeAt(i++))
+                ar.push(psize)
+                for (c=0;c<psize;c++) {
+                    ar.push(dec2hex(sigdecoded.charCodeAt(i++)));
+                    b++
+                }
+            }
+
+            // Update for previous bytes
+            sizetotal += 6
+            // Pad bytes properly
+            if (sizetotal < 255) {
+                sizetotal = '000000' + String(dec2hex(sizetotal));
+            } else if (sizetotal > 256 && sizetotal < 65534) {
+                a = '0000' + String(dec2hex(sizetotal));
+            } else if (sizetotal > 65535 && sizetotal < 16777215) {
+                a = '00' + String(dec2hex(sizetotal));
+            } else if (sizetotal > 16777216) {
+                a = String(dec2hex(sizetotal));
+            }
+
+/* Dear thing, I hate you.
+
+    Love, 
+        Ryan
+
+            console.log(version) 
+            console.log(sigtype)
+            console.log(pubalg)
+            console.log(hashalg)
+            console.log(dec2hex(size1))
+            console.log(dec2hex(size2))
+            blah = ""
+            for (d=0;d<ar.length;d++) {
+                console.log(ar[d])
+                blah += String.fromCharCode(ar[d])
+            }
+            console.log('04')  
+            console.log('ff')  
+            console.log(sizetotal.substr(0,2))
+            console.log(sizetotal.substr(2,2))
+            console.log(sizetotal.substr(4,2))
+            console.log(sizetotal.substr(6,2))
+
+            header = String.fromCharCode(version) +
+                     String.fromCharCode(sigtype) +
+                     String.fromCharCode(pubalg) +
+                     String.fromCharCode(hashalg) +
+                     String.fromCharCode(dec2hex(size1)) +
+                     String.fromCharCode(dec2hex(size2)) +
+                     blah + 
+                     String.fromCharCode('04') +
+                     String.fromCharCode('ff') +
+                     String.fromCharCode(sizetotal.substr(0,2)) +
+                     String.fromCharCode(sizetotal.substr(2,2)) +
+                     String.fromCharCode(sizetotal.substr(4,2)) +
+                     String.fromCharCode(sizetotal.substr(6,2))
+  */          
+            break
+        }
+    }
+    //alert(type)
+
+}
+
 
 function publicKey(key) {
     // Check for header thing
@@ -135,11 +250,11 @@ function publicKey(key) {
     // Then verify thta we chmop everything between begin and end
     key = key.replace(/^Version.*\n$/m, '')
     start = key.indexOf('-----BEGIN PGP PUBLIC KEY BLOCK-----\n\n') + 38;
-    finish = key.search(/\n=.*\n-----END PGP PUBLIC KEY BLOCK-----/);
+    end = key.search(/\n=.*\n-----END PGP PUBLIC KEY BLOCK-----/);
 
     // Slice our key out
-    key = key.slice(start,finish);
-    (debug) && console.log("Key start:finish => " + start + ":" + finish + "\n" + key);
+    key = key.slice(start,end);
+    (debug) && console.log("Key start:end => " + start + ":" + end + "\n" + key);
     
 
     // Base64 decode our key 
