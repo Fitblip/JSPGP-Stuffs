@@ -25,81 +25,7 @@ http://www.rfc-ref.org/RFC-TEXTS/2440/chapter5.html
 
 */
 
-/* 
-    # Full breakdown of signature packet    
-     === Packet Header ===
-   $ 4      // Version Number
-   $ 19     // Sig type (0x13)
-   $ 17     // pub key algo
-   $ 8      // digest algo
-   $ 0      // count1
-   $ 40     // count2 => Hashed subpacket == 40 bytes
-       # 5      // Subpacket Count
-        + 2     // Signature Creation Time (Scalar rep)
-         = 78   // Date1
-         = 177  // Date2
-         = 148  // Date3
-         = 174  // Date4
-
-       # 2      // Subpacket Count
-        + 27    // Key flags (packet 27)
-         = 3    // Flag 03 => 0x01 + 0x02 => can be used to sign and certify other keys
-
-       # 5      // Subpacket Count
-        + 9     // Key Expiration Time (Scalar rep)
-         = 0    // Sec1
-         = 13   // Sec2
-         = 47   // Sec3
-         = 0    // Sec4
-
-       # 6      // Subpacket Count
-        + 11    // Preferred Symmetric Algorithms
-         = 9    // AES with 256-bit key
-         = 8    // AES with 192-bit key
-         = 7    // AES with 128-bit key
-         = 3    // CAST5 (128 bit key, as per RFC 2144)
-         = 2    // TripleDES (DES-EDE, [SCHNEIER] [HAC] 168 bitkey derived from 192)
-
-       # 6      // Subpacket Count 
-        + 21    // Preferred Hash Algorithms
-         = 8    // SHA256
-         = 2    // SHA-1
-         = 9    // SHA384
-         = 10   // SHA512
-         = 11   // SHA224
-
-       # 4      // Subpacket Count 
-        + 22    // Preferred Compression Algorithms
-         = 2    // ZLIB
-         = 3    // BZip2
-         = 1    // ZIP
-
-       # 2      // Subpacket Count 
-        + 30    // Features
-         = 1    // Modification Detection
-
-       # 2      // Subpacket Count 
-        + 23    // Key Server Preferences
-         = 128  // No-modify (0x80)
-
-   $ 0      // count1
-   $ 10     // count2 => Unhashed subpacket == 10 bytes
-
-       # 9      // Subpacket Count 
-        + 16    // Key Server Preferences
-         = 9    // 0x09
-         = 207  // 0xCF
-         = 190  // 0xBE
-         = 215  // 0xD7
-         = 221  // 0xDD
-         = 32   // 0x20
-         = 153  // 0x99
-         = 240  // 0xF0
-            \->  09CFBED7DD2099F0
-*/    
-
-
-debug = true
+debug = false
 
 function dec2hex(d) {
     var hex = Number(d).toString(16);
@@ -112,7 +38,7 @@ function dec2hex(d) {
 
 // Parses out our email text properly into a format primed for hashing
 function parseText() {
-    var stuffs = document.getElementsByName('pubkey')[0].value
+    var stuffs = document.getElementsByName('message')[0].value
 
     // Split everything on newlines into an array
     stuffs = stuffs.split('\n')
@@ -125,7 +51,7 @@ function parseText() {
     }
 
     // Grab our hashing algorithm
-    msghash = stuffs[start].split(" ").pop()
+    this.hash = stuffs[start].split(" ").pop()
     // Start the line after our hashing algo, where text is
     start = start + 2 
     end = stuffs.indexOf('-----BEGIN PGP SIGNATURE-----')
@@ -133,20 +59,21 @@ function parseText() {
     // Loops through our lines array, if it is blank, stick in 
     // our \r\n\r\n sequence. Makes it more fault tolerant for 
     // windows/linux/unix in theory. 
-    msg = '';
+    this.msg = '';
     for (i=start;i<end;i++) {
         if (stuffs[i].trim() == "") {
             stuffs[i] = '\r\n\r\n'
-            msg += stuffs[i]
+            this.msg += stuffs[i]
         } else {
-            msg += stuffs[i].trim()
+            this.msg += stuffs[i].trim()
         }
     }
+    
 }
 
 // Parse out the signature part of our message for concatination with our msg text
 function parseSig() {
-    var stuffs = document.getElementsByName('pubkey')[0].value;
+    var stuffs = document.getElementsByName('message')[0].value;
     stuffs = stuffs.replace(/^Version.*\n$/m, '');
     start  = stuffs.indexOf('-----BEGIN PGP SIGNATURE-----\n\n') + 31;
     end    = stuffs.search(/\n=.*\n-----END PGP SIGNATURE-----$/);
@@ -201,7 +128,7 @@ function parseSig() {
 
             // Build our header string to be thrown into SHA256()
             // Also BWAHAHA I ARE MIGHTIER THEN THE HASHING ALGORITHM!
-            header = String.fromCharCode(parseInt(version,16)) +
+            this.header = String.fromCharCode(parseInt(version,16)) +
                      String.fromCharCode(parseInt(sigtype,16)) +
                      String.fromCharCode(parseInt(pubalg,16)) +
                      String.fromCharCode(parseInt(hashalg,16)) +
@@ -227,22 +154,84 @@ function parseSig() {
             // CRC values (left-most 2 bytes of the hash)
             CRC1 = dec2hex(sigdecoded.charCodeAt(i++));
             CRC2 = dec2hex(sigdecoded.charCodeAt(i++));
-            CRC = CRC1 + CRC2;
+            this.CRC = CRC1 + CRC2;
             (debug) && console.log('CRC => ' + CRC)
 
+            if (info.type == "DSA") {
+                primes = ['r','s'];
+                a = {};
+                a['r'] = "";
+                a['s'] = "";
+                i -= 1
+                for (c=0;c<primes.length;c++){
+                    size = Math.floor((sigdecoded.charCodeAt(++i) * 256 + sigdecoded.charCodeAt(i + 1) + 7) / 8) 
+                    for (b=0;b<size;b++) {
+                        a[primes[c]] += String(dec2hex(sigdecoded.charCodeAt(i + b + 2)));
+                    }
+                    a[primes[c]] = a[primes[c]].split(' ')
+                    i += (size +1)
+                }
+                this.dsaR = new BigInteger(a['r'].toString(),16)
+                this.dsaS = new BigInteger(a['s'].toString(),16)
+            } else if (info.type == "RSA") {
+                a = {};
+                a['z'] = ""
+                i -= 1
+                size = Math.floor((sigdecoded.charCodeAt(++i) * 256 + sigdecoded.charCodeAt(i + 1) + 7) / 8)   
+                for (b=0;b<size;b++) {
+                    a['z'] += String(dec2hex(sigdecoded.charCodeAt(i + b + 2)));
+                }
+                a['z'] = a['z'].split(' ')
+                i += (size +1) 
+                this.rsaZ = new BigInteger(a['z'].toString(),16)
+            } else {
+                //error
+            }
             // Break after we get the info we need
             break
         }
     }
 }
 
-function magic() {
-    parseText();
-    parseSig();
-    msghash = SHA256(msg + header);
-    // Print some debug info about our CRC's and message hashes
-    (debug) && console.log("CRC & [0:4] of message hash => " + CRC + " & " + msghash.substr(0,4));
-    if (debug) {if (CRC == msghash.substr(0,4)) {console.log("CRC Match!");} else {console.log("CRC Mis-match!")};}
+// MAAAAAAAATH 
+function RSAVerify(z,e,n,hash){
+    var hash = new BigInteger(hash,16)
+    var mdtmp = z.modPow(e,n)
+    var mdtmp = new BigInteger(mdtmp.toString(16).substr(mdtmp.toString(16).length-64,mdtmp.toString(16).length),16)    
+
+    if (mdtmp.compareTo(hash) == 0) {
+        return true
+    } else {
+        return false
+    }
+}
+
+// MOAR MAAAAAAAAAAATH
+function DSAVerify(g,p,q,y,r,s,hash) {
+    // If our DSA key is < 1535 (2048), then truncate
+    // the sha256 hash value to 40 bytes
+    if (p.toString(16).length < 512) {
+        hash = hash.substr(0,40)
+    }
+
+    // Calculate individual pieces
+    m = new BigInteger(hash,16);
+    w = s.modInverse(q);
+    u1 = m.multiply(w).mod(q);
+    u2 = r.multiply(w).mod(q);
+
+    // Steps to calculate v
+    a = g.modPow(u1,p);
+    b = y.modPow(u2,p);
+    c = a.multiply(b).mod(p)
+    v = c.mod(q)
+
+    // If v == r
+    if (v.compareTo(r) == 0) {
+        return true
+    } else {
+        return false
+    }
 }
 
 function publicKey(key) {
@@ -438,9 +427,7 @@ function publicKey(key) {
                 this.elgP = new BigInteger(a['p'].toString(),16)
                 this.elgG = new BigInteger(a['g'].toString(),16)
                 this.elgY = new BigInteger(a['y'].toString(),16)
-
-                this.type = "ELGAMAL";
-                found = 3;
+                this.type = "DSA";
 
             // We found the DSA sig stuffs
             } else if (algo == 17 && vers == 4) {
@@ -523,7 +510,7 @@ function publicKey(key) {
                     algos[1] = "MD5";
                     algos[2] = "SHA-1";
                     algos[3] = "RIPE-MD/160";
-                    algos[8] = "SHA-256";
+                    algos[8] = "SHA256";
                     algos[9] = "SHA384";
                     algos[10] = "SHA512";
                     algos[11] = "SHA224";
@@ -543,7 +530,7 @@ function publicKey(key) {
                     algos[1] = "MD5";
                     algos[2] = "SHA-1";
                     algos[3] = "RIPE-MD/160";
-                    algos[8] = "SHA-256";
+                    algos[8] = "SHA256";
                     algos[9] = "SHA384";
                     algos[10] = "SHA512";
                     algos[11] = "SHA224";
