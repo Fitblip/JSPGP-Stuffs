@@ -228,6 +228,9 @@ function msgverify() {
     msghash = SHA256(text.msg + sig.header);
 
     verify = document.getElementById('verify');
+    if (verify == "") {
+        alert("You need to supply some signed text!")
+    }
 
     if (sig.CRC == msghash.substr(0,4)) {
         crccheck = true
