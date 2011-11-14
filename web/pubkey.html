@@ -1,149 +1,276 @@
 <html>
 <head>
-<style>
-/*textarea
-{
-    width:45%;
-    height:70%;
-}
+    <style>
+        .textwrapper
+        {
+            margin-left: auto;
+            margin-right: auto;
+            width:85%;
+            height:550px;
+        }
 
-.textwrapper
-{
-    margin:5px 0;
-    padding:0px;
-}*/
+        .infos 
+        {
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #D4D4D4;
+            border-spacing:0px;
+            table-layout: fixed;
 
-.infos 
-{
-margin-left: auto;
-margin-right: auto;
-border: 1px solid #D4D4D4;
-border-spacing:0px;
-}
+        }
 
-.infos td {
-border: 1px solid #D4D4D4;
-}
+        .infos td {
+            border: 1px solid #D4D4D4;
+        }
 
-html, body 
-{
-height:100%;
-}
+        #t1 {
+            text-align: left;
+        }
 
+        .msginfo
+        {
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #D4D4D4;
+            border-spacing:0px;
+        }
 
-</style>
+        .msginfo td {
+            border: 1px solid #D4D4D4;
+        }
 
-<script src='md5.js'></script>
-<script src='sha1.js'></script>
-<script src='sha256.js'></script>
-<script src='base64.js'></script>
-<script src="jsbn.js"></script>
-<script src="jsbn2.js"></script>
-<script src='mypgp.js'></script>
+        html, body 
+        {
+            height:100%;
+        }
 
+        #left { 
+            width: 49%;
+            float: left
+        }
+
+        #right {
+            width: 49%; 
+            float: right
+        }
+
+        .clear { 
+            clear: both;
+        }
+    </style>
+    <script src='md5.js'></script>
+    <script src='sha1.js'></script>
+    <script src='sha256.js'></script>
+    <script src='base64.js'></script>
+    <script src="jsbn.js"></script>
+    <script src="jsbn2.js"></script>
+    <script src='mypgp.js'></script>
 </head>
-<body>
 
-<div style="text-align: center">
- <!--    Hash a string:<input id='enter' value='enter stuffs!' onfocus='clearinput("enter")' onkeydown='if (event.keyCode == 13) dostuffs()'></input>
-   Lookup Email<input id='email' value='Example@gmail.com' onfocus='clearinput("email")' onkeydown='if (event.keyCode == 13) dolookup()'></input>
-    <input type='button' value='Encrypt!' action='dostuffs()'></input>
-    <br>
-    <form> 
-    <input type='button' value='Clear'  action='cleareverything()'></input>
-    </form>-->
+<body>
+<div id='dummykey' style="display: none;">
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+mI0ETrmWmAEEALqAbieFLoHwRtk5+phZUEyISmKNXicPxDpU8tFiUpqT8HiZ84/3
+1vYTMxbLBUQWfC1n69zFQqiBJnmgCkMGinsY9B13dQP2DvUL1m6vBoDEAZRDUMwi
+i9LHsR4Nhoj2/VtbZkyecWqhdJ56Dqp4fk2fy2cC0NB9KhTEj1l/AvcxABEBAAG0
+IlJTQTEwMjRUZXN0IDxyc2ExMDI0dGVzdEBibGFoLmNvbT6IuAQTAQIAIgUCTrmW
+mAIbAwYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQYrVFfX8Q/YVe+QP/VtWe
+aqNzncFVFhrpq7r7tRQPTEvxZVaDgUm3PhgsivAc2NjWOEu9Ks5sjkKhJgnZkvJq
+NYyXWeiPKyunSMYW0fV2KO9QkwTkQ4bvwD75OTcmp+iHJ+VEjwPZa+VHWlgTDwDo
+mxHkmJhVTqvxQpfjGsw+dHjC5YXo8LUh8Tx8olC4jQROuZaYAQQAxlWMHZVcvHi6
+ITxXagZJ5jyKejBqP8F+2LqPC89vWI62RmGOeV0IbOsSjbBpxTml5luXfccd+oEE
+xGUag6Rl79YYrxOO5ezO8sU7+YvPc/aaM572Bra6T+fF3YaxadJnNfRMXmovB0Lz
+IGR9PI6hn18WpGMOzOEPTgC7Bz3YN7sAEQEAAYifBBgBAgAJBQJOuZaYAhsMAAoJ
+EGK1RX1/EP2Fm4wEALD5N5A4DCudKdDWpBZtLSsylNryL9FWWp3dm4S33cXRBFT5
+zAnrfBOuh4L5RIX/shm/ap9wCXgCwAr1c4F1DE1sDjzhlAF1oTURdijgBouRv+Mg
+6qBafzjHL9Cm41B05eCv6fdqgxYufsEsWyFCSGAsVTwtp0YF2hcnLlSURVPT
+=EnHr
+-----END PGP PUBLIC KEY BLOCK-----
+</div>
+
+<div id='dummymsg' style="display: none;">
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Hello! 
+
+This is some dummy text :)
+
+YAY!
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+iJwEAQEIAAYFAk65m4YACgkQYrVFfX8Q/YUKCgQAkOK3KJZe2hdB7uzgMfTrxUPg
+sbhHr5Lm0aRAF1EqNZKvvTIwewIHGZ2LvKqcFaLJYWeCZSb5KO8IBHXy0a7g1K4H
+lSUQI/m+LZ9RXbrkYAQ+Tynzge6nzskvf794gh+wa/NaGP6HcA9I7LmYpqbMqbV2
+ifdSnXPWQBcQP32i/8c=
+=As4j
+-----END PGP SIGNATURE-----
+</div>
+
+<div style="text-align: center;">
     <div class="textwrapper">
-        <h2>Enter public key and hit 'Get info'</h2>
-        <textarea name="pubkey" cols="75" rows="35" ></textarea>
-        <form action="javascript:pubkey()" name="t">
-          <input type="submit" value="Get info">
-        </form>
+        <h2 style="text-align: center;">Enter public key on left, signed message on right!</h2>
+        <div id='left'>
+            <textarea name="pubkey" cols="75" rows="25" ></textarea>
+            <form action="javascript:pubkey()" name="t">
+                <input id='getinfo' type="submit" value="1.) Get info">
+            </form>
+            <form action="javascript:examplepubkey()" name="t">
+                <input id='examplekey' type="submit" value="Example">
+            </form>
+        </div>
+        <div id='right'>
+            <textarea name="message" cols="75" rows="25" ></textarea>
+            <form action="javascript:msgverify()" name="t">
+                <input id='verifymsg' type="submit" value="2.) Verify" disabled=true>
+            </form>
+            <form action="javascript:examplemsg()" name="t">
+                <input id='examplemsg' type="submit" value="Example">
+            </form>
+        </div>
+        <div class"clear"></div>
     </div>
 </div>
 
-<div id="out" style="text-align: center"></div>
+
+<div id='results'>
+        <div id="out" style="text-align: center"></div>
+        <div id="verify" style="text-align: center"></div>
+</div>
+
 <br>
 
 <script>
-function dostuffs() {
-    string = document.getElementById('enter').value;
-    sha1   = SHA1(string);
-    sha256 = SHA256(string);
-    md5    = MD5(string);
-    out = document.getElementById('out');
+function examplepubkey(){
+    document.getElementsByName('pubkey')[0].innerHTML = document.getElementById('dummykey').innerHTML
+    document.getElementById('verifymsg').disabled = false
+}
 
-    out.innerHTML = out.innerHTML + 
-            '<pre>SHA256 (' + string + ') : ' + sha256 + '</pre>' +
-            '<pre>SHA1   (' + string + ') : ' + sha1   + '</pre>' +
-            '<pre>MD5    (' + string + ') : ' + md5    + '</pre>' ;
+function examplemsg(){
+    document.getElementsByName('message')[0].innerHTML = document.getElementById('dummymsg').innerHTML
 }
 
 function pubkey() {
-// Grab stuff from 
-key = document.getElementsByName('pubkey')[0].value;
-info = new publicKey(key);
+    // Grab stuff from our pubkey textarea
+    key = document.getElementsByName('pubkey')[0].value;
+    info = new publicKey(key);
 
-if (info.err != undefined) {
-    alert("Something's wrong! Have some debug info:\n\n" + info.err)
-    return
+    if (info.err != undefined) {
+        alert("Something's wrong! Have some debug info:\n\n" + info.err)
+        return
+    }
+
+    user        = info.user
+    user        = user.replace('<','&lt;').replace('>','&gt;')
+
+    created     = info.created;
+    expires     = info.exp;
+    prefhash    = info.hash
+    type        = info.type
+
+    keyid       = info.id
+
+    enckey      = info.pkey
+    version     = info.vers
+
+    out = document.getElementById('out');
+
+    out.innerHTML = out.innerHTML + 
+                    '<table class="infos" style="width:60%;">' + 
+                        '<tbody>' + 
+
+                            '<tr>' + 
+                                '<td>' + 'User info' + '</td>' +
+                                '<td>' + user + '</td>' +
+                            '</tr>' + 
+
+                            '<tr>' + 
+                                '<td>' + 'Created' + '</td>' +
+                                '<td>' + created + '</td>' +
+                            '</tr>' + 
+
+                            '<tr>' + 
+                                '<td>' + 'Expires' + '</td>' +
+                                '<td>' + expires + '</td>' +
+                            '</tr>' + 
+
+                            '<tr>' + 
+                                '<td>' + 'Preferred Hashing Algorithm' + '</td>' +
+                                '<td>' + prefhash + '</td>' +
+                            '</tr>' + 
+
+                            '<tr>' + 
+                                '<td>' + 'Key Type' + '</td>' +
+                                '<td>' + type + '</td>' +
+                            '</tr>' + 
+
+                            '<tr>' + 
+                                '<td>' + 'Key ID' + '</td>' +
+                                '<td>' + keyid + '</td>' +
+                            '</tr>' + 
+
+                            '<tr>' + 
+                                '<td>' + 'Key Version' + '</td>' +
+                                '<td>' + version + '</td>' +
+                            '</tr>' +
+                        '<tbody>' + 
+                    '</table><br>';
+    // Allow verification step
+    document.getElementById('verifymsg').disabled = false
 }
-user        = info.user
-user        = user.replace('<','&lt;').replace('>','&gt;')
 
-created     = info.created;
-expires     = info.exp;
-prefhash    = info.hash
-type        = info.type
+function msgverify() {
+    text = new parseText();
+    sig = new parseSig();
+    msghash = SHA256(text.msg + sig.header);
 
-keyid       = info.id
+    verify = document.getElementById('verify');
 
-enckey      = info.pkey
-version     = info.vers
+    if (sig.CRC == msghash.substr(0,4)) {
+        crccheck = true
+        crchtml = '<font color="green">PASS</font>'
+    } else {
+        crccheck = false
+        crchtml = '<font color="red">FAIL</font>'
+    };
 
-out = document.getElementById('out');
+    if (info.type == "DSA") {
+        verified = DSAVerify(info.dsaG,info.dsaP,info.dsaQ,info.dsaY,sig.dsaR,sig.dsaS,msghash);
+    } else if (info.type == "RSA") {
+        verified = RSAVerify(sig.rsaZ,info.rsaE,info.rsaN,msghash);
+    } else {
+        alert("Somethings wrong! So very wrong. You officially hasseld the hoff ")
+    }
 
-out.innerHTML = out.innerHTML + 
-                '<table class="infos" style="width:60%;">' + 
-                    '<tbody>' + 
+    // In case they decided to sign with their subkey...
+    if (!verified && info.type == "RSA") {
+        verified = RSAVerify(sig.rsaZ,info.rsasubE,info.rsasubN,msghash);
+    }
 
-                        '<tr>' + 
-                            '<td>' + 'User info' + '</td>' +
-                            '<td>' + user + '</td>' +
-                        '</tr>' + 
+    if (verified) {
+        verifiedhtml = '<font color="green">PASS</font>'
+    } else {
+         verifiedhtml = '<font color="red">FAIL</font>'
+    }
 
-                        '<tr>' + 
-                            '<td>' + 'Created' + '</td>' +
-                            '<td>' + created + '</td>' +
-                        '</tr>' + 
+    verify.innerHTML = verify.innerHTML + 
+                    '<table class="infos" style="width:60%;">' + 
+                        '<tbody>' + 
+                            '<tr>' + 
+                                '<td>' + 'CRC Check for ' + info.id + '</td>' +
+                                '<td>' + crchtml + '</td>' +
+                            '</tr>' + 
+                            '<tr>' + 
+                                '<td>' + info.type + ' Verification for ' + info.id + '</td>' +
+                                '<td>' + verifiedhtml + '</td>' +
+                            '</tr>' + 
 
-                        '<tr>' + 
-                            '<td>' + 'Expires' + '</td>' +
-                            '<td>' + expires + '</td>' +
-                        '</tr>' + 
-
-                        '<tr>' + 
-                            '<td>' + 'Preferred Hashing Algorithm' + '</td>' +
-                            '<td>' + prefhash + '</td>' +
-                        '</tr>' + 
-
-                        '<tr>' + 
-                            '<td>' + 'Key Type' + '</td>' +
-                            '<td>' + type + '</td>' +
-                        '</tr>' + 
-
-                        '<tr>' + 
-                            '<td>' + 'Key ID' + '</td>' +
-                            '<td>' + keyid + '</td>' +
-                        '</tr>' + 
-
-                        '<tr>' + 
-                            '<td>' + 'Key Version' + '</td>' +
-                            '<td>' + version + '</td>' +
-                        '</tr>' +
-                    '<tbody>' + 
-                '</table><br>';
-}
-
+                        '<tbody>' + 
+                    '</table><br>';
+    }
 </script>
 </body>
 
