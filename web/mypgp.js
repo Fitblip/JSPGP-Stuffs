@@ -113,34 +113,38 @@ function dec2hex(d) {
 // Parses out our email text properly into a format primed for hashing
 function parseText() {
     var stuffs = document.getElementsByName('pubkey')[0].value
+
+    // Split everything on newlines into an array
     stuffs = stuffs.split('\n')
 
+    // Find our hashing algorithm
     for (i=0;i<stuffs.length;i++) {
         if ( stuffs[i].search(/^Hash.*$/) != -1) {
             start = i
         }
     }
 
-    hash = stuffs[start].split(" ").pop()
+    // Grab our hashing algorithm
+    msghash = stuffs[start].split(" ").pop()
+    // Start the line after our hashing algo, where text is
     start = start + 2 
     end = stuffs.indexOf('-----BEGIN PGP SIGNATURE-----')
 
-    hashme = '';
+    // Loops through our lines array, if it is blank, stick in 
+    // our \r\n\r\n sequence. Makes it more fault tolerant for 
+    // windows/linux/unix in theory. 
+    msg = '';
     for (i=start;i<end;i++) {
-        if (stuffs[i] == "") {
+        if (stuffs[i].trim() == "") {
             stuffs[i] = '\r\n\r\n'
-            hashme += stuffs[i]
-            console.log(i)
+            msg += stuffs[i]
         } else {
-            hashme += stuffs[i].trim()
-            console.log(i)
+            msg += stuffs[i].trim()
         }
     }
 }
 
 // Parse out the signature part of our message for concatination with our msg text
-
-// TODO needs some fixing at some point, sloppy coding
 function parseSig() {
     var stuffs = document.getElementsByName('pubkey')[0].value;
     stuffs = stuffs.replace(/^Version.*\n$/m, '');
@@ -150,14 +154,21 @@ function parseSig() {
     var sigdecoded = r2s(sig);
 
     for (i=0;i<sigdecoded.length;i++) {
+        // Poor mans skip of the first 2-3 bytes
         if (dec2hex(sigdecoded.charCodeAt(i)) == '04') {
+            // Packet stuffs
             version = dec2hex(sigdecoded.charCodeAt(i++))
             sigtype = dec2hex(sigdecoded.charCodeAt(i++))
             pubalg  = dec2hex(sigdecoded.charCodeAt(i++))
             hashalg = dec2hex(sigdecoded.charCodeAt(i++))
             size1   = sigdecoded.charCodeAt(i++)
             size2   = sigdecoded.charCodeAt(i++)
+
+            // Figure out how big everything is
             sizetotal = ((size1<<8) + (size2)) 
+
+            // Loop over any hashed bytes and push each packet type into
+            // an array
             var ar = new Array();
             for (b=0;b<sizetotal;b++) {
                 psize   = dec2hex(sigdecoded.charCodeAt(i++))
@@ -170,6 +181,7 @@ function parseSig() {
 
             // Update for previous bytes
             sizetotal += 6
+
             // Pad bytes properly
             if (sizetotal < 255) {
                 sizetotal = '000000' + String(dec2hex(sizetotal));
@@ -181,50 +193,57 @@ function parseSig() {
                 a = String(dec2hex(sizetotal));
             }
 
-/* Dear thing, I hate you.
-
-    Love, 
-        Ryan
-
-            console.log(version) 
-            console.log(sigtype)
-            console.log(pubalg)
-            console.log(hashalg)
-            console.log(dec2hex(size1))
-            console.log(dec2hex(size2))
-            blah = ""
+            // Add all hashed bytes to a long string, and parse properly
+            hpacket = ''    
             for (d=0;d<ar.length;d++) {
-                console.log(ar[d])
-                blah += String.fromCharCode(ar[d])
+                hpacket += String.fromCharCode(parseInt(ar[d],16))
             }
-            console.log('04')  
-            console.log('ff')  
-            console.log(sizetotal.substr(0,2))
-            console.log(sizetotal.substr(2,2))
-            console.log(sizetotal.substr(4,2))
-            console.log(sizetotal.substr(6,2))
 
-            header = String.fromCharCode(version) +
-                     String.fromCharCode(sigtype) +
-                     String.fromCharCode(pubalg) +
-                     String.fromCharCode(hashalg) +
-                     String.fromCharCode(dec2hex(size1)) +
-                     String.fromCharCode(dec2hex(size2)) +
-                     blah + 
-                     String.fromCharCode('04') +
-                     String.fromCharCode('ff') +
-                     String.fromCharCode(sizetotal.substr(0,2)) +
-                     String.fromCharCode(sizetotal.substr(2,2)) +
-                     String.fromCharCode(sizetotal.substr(4,2)) +
-                     String.fromCharCode(sizetotal.substr(6,2))
-  */          
+            // Build our header string to be thrown into SHA256()
+            // Also BWAHAHA I ARE MIGHTIER THEN THE HASHING ALGORITHM!
+            header = String.fromCharCode(parseInt(version,16)) +
+                     String.fromCharCode(parseInt(sigtype,16)) +
+                     String.fromCharCode(parseInt(pubalg,16)) +
+                     String.fromCharCode(parseInt(hashalg,16)) +
+                     String.fromCharCode(parseInt(dec2hex(size1),16)) +
+                     String.fromCharCode(parseInt(dec2hex(size2),16)) +
+                     hpacket + 
+                     // I belive these are static values for v4 keys
+                     String.fromCharCode(parseInt('04',16)) +
+                     String.fromCharCode(parseInt('ff',16)) +
+                     // Last 4 bytes are the size of the entire header
+                     String.fromCharCode(parseInt(sizetotal.substr(0,2),16)) +
+                     String.fromCharCode(parseInt(sizetotal.substr(2,2),16)) +
+                     String.fromCharCode(parseInt(sizetotal.substr(4,2),16)) +
+                     String.fromCharCode(parseInt(sizetotal.substr(6,2),16))
+
+            // Calculate our unhashed total packet size, and skip it
+            // Usually a key id, maybe other info we shouldn't really trust. Big freaking deal.
+            size1 = sigdecoded.charCodeAt(i++)
+            size2 = sigdecoded.charCodeAt(i++)
+            sizetotal = ((size1<<8) + (size2)) 
+            i += sizetotal
+
+            // CRC values (left-most 2 bytes of the hash)
+            CRC1 = dec2hex(sigdecoded.charCodeAt(i++));
+            CRC2 = dec2hex(sigdecoded.charCodeAt(i++));
+            CRC = CRC1 + CRC2;
+            (debug) && console.log('CRC => ' + CRC)
+
+            // Break after we get the info we need
             break
         }
     }
-    //alert(type)
-
 }
 
+function magic() {
+    parseText();
+    parseSig();
+    msghash = SHA256(msg + header);
+    // Print some debug info about our CRC's and message hashes
+    (debug) && console.log("CRC & [0:4] of message hash => " + CRC + " & " + msghash.substr(0,4));
+    if (debug) {if (CRC == msghash.substr(0,4)) {console.log("CRC Match!");} else {console.log("CRC Mis-match!")};}
+}
 
 function publicKey(key) {
     // Check for header thing
@@ -247,7 +266,7 @@ function publicKey(key) {
 
     // Make this a lot more fault tolarent
     // Search and replace for Version:blahblahblah, and remove
-    // Then verify thta we chmop everything between begin and end
+    // Then verify that we chmop everything between start and end
     key = key.replace(/^Version.*\n$/m, '')
     start = key.indexOf('-----BEGIN PGP PUBLIC KEY BLOCK-----\n\n') + 38;
     end = key.search(/\n=.*\n-----END PGP PUBLIC KEY BLOCK-----/);
@@ -471,8 +490,8 @@ function publicKey(key) {
 
             // Skip our header info
             i = i + 2;
-            alg  = decoded.charCodeAt(i++)
-            hash = decoded.charCodeAt(i++)
+            var alg  = decoded.charCodeAt(i++);
+            var hash = decoded.charCodeAt(i++);
 
             // Hashed packet count
             hCount = ((decoded.charCodeAt(i++)<<8) + decoded.charCodeAt(i++));
