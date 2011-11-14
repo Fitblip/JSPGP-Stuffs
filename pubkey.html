@@ -223,14 +223,16 @@ function pubkey() {
 }
 
 function msgverify() {
-    text = new parseText();
-    sig = new parseSig();
-    msghash = SHA256(text.msg + sig.header);
-
     verify = document.getElementById('verify');
     if (verify == "") {
         alert("You need to supply some signed text!")
     }
+    
+    text = new parseText();
+    sig = new parseSig();
+    msghash = SHA256(text.msg + sig.header);
+
+
 
     if (sig.CRC == msghash.substr(0,4)) {
         crccheck = true
