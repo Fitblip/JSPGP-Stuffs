@@ -61,14 +61,20 @@ function parseText() {
     // windows/linux/unix in theory. 
     this.msg = '';
     for (i=start;i<end;i++) {
-        if (stuffs[i].trim() == "") {
-            stuffs[i] = '\r\n\r\n'
+        // Replace all \r and \n chars, and strip off ending spaces
+        // Originally used trim(), but it would get rid of ALL spaces :(
+        if (stuffs[i].replace('\r','').replace('\n','').replace(/\s+$/,'') == "") {
+            stuffs[i] = '\r\n'
             this.msg += stuffs[i]
         } else {
-            this.msg += stuffs[i].trim()
+            // Don't pad last line with \r\n chars
+            if (i == end -1 ) {
+                this.msg += stuffs[i].replace(/\s+$/,'').replace('\r','').replace('\n','')
+            } else {
+                this.msg += stuffs[i].replace(/\s+$/,'').replace('\r','').replace('\n','') + '\r\n'
+            }
         }
     }
-    
 }
 
 // Parse out the signature part of our message for concatination with our msg text
